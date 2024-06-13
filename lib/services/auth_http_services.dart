@@ -1,7 +1,9 @@
 import 'dart:convert';
 
+import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import 'package:imtihon3/controllers/user_controller.dart';
+import 'package:imtihon3/models/hotel.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthHttpServices {
@@ -89,6 +91,40 @@ class AuthHttpServices {
       if (response.statusCode != 200) {
         throw data['error']['message'];
       }
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<Map<String, dynamic>> getHotels() async {
+    Uri url =
+        Uri.parse("https://imtihon3-default-rtdb.firebaseio.com/hotels.json");
+
+    try {
+      final response = await http.get(url);
+      if (response.statusCode != 200) {
+        throw 'error';
+      }
+
+      final Map<String, dynamic> data = jsonDecode(response.body);
+
+      data.forEach((key, value) {
+        value['hotelId'] = key;
+
+        Hotel json = Hotel(
+            hotelId: value['hotelId'],
+            amenities: value['amenities'],
+            comment: value['comment'],
+            description: value['description'],
+            hotelName: value['hotelName'],
+            imageUrl: value['imageUrl'],
+            price: double.parse(value['price'].toString()),
+            rating: value['rating'],
+            spaceRooms: value['spaceRooms']);
+        print(json);
+      });
+
+      return data;
     } catch (e) {
       rethrow;
     }

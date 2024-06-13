@@ -6,9 +6,10 @@ import 'package:imtihon3/views/screens/admin_panel.dart';
 import 'package:imtihon3/views/screens/home_screen.dart';
 import 'package:imtihon3/views/screens/register_screen.dart';
 import 'package:imtihon3/views/screens/reset_password_screen.dart';
+
 class LoginScreen extends StatefulWidget {
   final ValueChanged<void> themChanged;
-   LoginScreen({super.key, required this.themChanged});
+  LoginScreen({super.key, required this.themChanged});
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
@@ -29,13 +30,15 @@ class _LoginScreenState extends State<LoginScreen> {
       setState(() {
         isLoading = true;
       });
-      if (email==Admin.admin['login'] && password==Admin.admin['parol']) {
+      if (email == Admin.admin['login'] && password == Admin.admin['parol']) {
         Navigator.pushReplacement(
           // ignore: use_build_context_synchronously
           context,
           MaterialPageRoute(
             builder: (ctx) {
-              return  AdminPanel(themChanged: widget.themChanged,);
+              return AdminPanel(
+                themChanged: widget.themChanged,
+              );
             },
           ),
         );
@@ -47,7 +50,9 @@ class _LoginScreenState extends State<LoginScreen> {
           context,
           MaterialPageRoute(
             builder: (ctx) {
-              return  HomeScreen(themChanged: widget.themChanged,);
+              return HomeScreen(
+                themChanged: widget.themChanged,
+              );
             },
           ),
         );
@@ -158,7 +163,9 @@ class _LoginScreenState extends State<LoginScreen> {
                     context,
                     MaterialPageRoute(
                       builder: (ctx) {
-                        return  RegisterScreen(themChanged: widget.themChanged,);
+                        return RegisterScreen(
+                          themChanged: widget.themChanged,
+                        );
                       },
                     ),
                   );
