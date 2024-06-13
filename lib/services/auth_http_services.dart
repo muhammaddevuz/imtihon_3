@@ -121,7 +121,6 @@ class AuthHttpServices {
             price: double.parse(value['price'].toString()),
             rating: value['rating'],
             spaceRooms: value['spaceRooms']);
-        print(json);
       });
 
       return data;
