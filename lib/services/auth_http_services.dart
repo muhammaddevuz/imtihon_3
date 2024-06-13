@@ -127,5 +127,6 @@ class AuthHttpServices {
     } catch (e) {
       rethrow;
     }
+    print('as');
   }
 }
