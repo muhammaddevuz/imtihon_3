@@ -74,7 +74,7 @@ class AuthHttpServices {
 
     DateTime expiryDate =
         DateTime.parse(sharedPreferences.getString("expiryDate")!);
-
+    print('sas');
     return expiryDate.isAfter(DateTime.now());
   }
 
