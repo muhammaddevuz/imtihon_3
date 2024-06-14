@@ -5,7 +5,7 @@ import 'package:imtihon3/functions/review_calculator.dart';
 import 'package:imtihon3/models/hotel.dart';
 
 class HotelInfoScreen extends StatefulWidget {
-  Hotel hotel;
+  final Hotel hotel;
   HotelInfoScreen({super.key, required this.hotel});
 
   @override
@@ -14,8 +14,9 @@ class HotelInfoScreen extends StatefulWidget {
 
 class _HotelInfoScreenState extends State<HotelInfoScreen> {
   int i = 0;
+
   void toggleImage() {
-    if (i + 1 < widget.hotel.imageUrl.length - 1) {
+    if (i + 1 < widget.hotel.imageUrl.length) {
       i++;
     } else {
       i = 0;
@@ -27,9 +28,10 @@ class _HotelInfoScreenState extends State<HotelInfoScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          'Hotel detail',
-        ),
+        title: const Text('Hotel detail'),
+        leading: IconButton(
+            onPressed: () => Navigator.of(context).pop(),
+            icon: Icon(Icons.arrow_back_ios)),
       ),
       body: Padding(
         padding: const EdgeInsets.all(10),
@@ -45,9 +47,7 @@ class _HotelInfoScreenState extends State<HotelInfoScreen> {
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(14.sp),
                   image: DecorationImage(
-                    image: NetworkImage(
-                      widget.hotel.imageUrl[i],
-                    ),
+                    image: NetworkImage(widget.hotel.imageUrl[i]),
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -62,12 +62,13 @@ class _HotelInfoScreenState extends State<HotelInfoScreen> {
                         width: 40.w,
                         alignment: Alignment.center,
                         decoration: BoxDecoration(
-                            color: const Color(0xFFC3C7CA),
-                            borderRadius: BorderRadius.circular(13.sp)),
+                          color: const Color(0xFFC3C7CA),
+                          borderRadius: BorderRadius.circular(13.sp),
+                        ),
                         child: Padding(
                           padding: EdgeInsets.all(5.sp),
-                          child: Text(
-                              "${i + 1}/${widget.hotel.imageUrl.length - 1}"),
+                          child:
+                              Text("${i + 1}/${widget.hotel.imageUrl.length}"),
                         ),
                       ),
                     ),
@@ -97,7 +98,7 @@ class _HotelInfoScreenState extends State<HotelInfoScreen> {
                       Row(
                         children: [
                           Text(
-                            "${(ReviewCalculator(hotel: widget.hotel).reviewCalculate).toStringAsFixed(2)} / (${widget.hotel.rating.length - 1} Reviews)",
+                            "${(ReviewCalculator(hotel: widget.hotel).reviewCalculate).toStringAsFixed(2)} / (${widget.hotel.rating.length} Reviews)",
                             style: TextStyle(fontSize: 12.sp),
                           ),
                         ],
@@ -110,7 +111,7 @@ class _HotelInfoScreenState extends State<HotelInfoScreen> {
                     child: Row(
                       children: [
                         Text(
-                            "${widget.hotel.spaceRooms.length} Rooms are avaliable")
+                            "${widget.hotel.spaceRooms.length} Rooms are available")
                       ],
                     ),
                   ),
@@ -132,37 +133,41 @@ class _HotelInfoScreenState extends State<HotelInfoScreen> {
                       ),
                     ],
                   ),
-                  Column(
-                    children: [
-                      Text(
-                        "What this place offers",
-                        style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 18.sp,
-                            fontWeight: FontWeight.w700),
+                  Text(
+                    "What this place offers",
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 18.sp,
+                        fontWeight: FontWeight.w700),
+                  ),
+                  SizedBox(
+                    height: 200.h,
+                    child: GridView.builder(
+                      itemCount: widget.hotel.amenities.length,
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        mainAxisSpacing: 10.sp,
+                        crossAxisSpacing: 10.sp,
+                        crossAxisCount: 3,
                       ),
-                      GridView.builder(
-                          itemCount: widget.hotel.amenities.length - 1,
-                          gridDelegate:
-                              SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount: 2),
-                          itemBuilder: (_, index) {
-                            List.generate(
-                                widget.hotel.amenities.length - 1,
-                                (int i) => Container(
-                                      padding: EdgeInsets.all(20.sp),
-                                      decoration: BoxDecoration(),
-                                      child: Text(
-                                        widget.hotel.amenities[index],
-                                        style: TextStyle(fontSize: 15.sp),
-                                      ),
-                                    ));
-                          })
-                    ],
-                  )
+                      itemBuilder: (_, index) {
+                        return Container(
+                          alignment: Alignment.center,
+                          padding: EdgeInsets.all(12.sp),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10.sp),
+                            border: Border.all(color: Colors.grey),
+                          ),
+                          child: Text(
+                            widget.hotel.amenities[index],
+                            style: TextStyle(fontSize: 15.sp),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
                 ],
               ),
-            )
+            ),
           ],
         ),
       ),
