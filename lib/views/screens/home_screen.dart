@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:imtihon3/controllers/hotel_controller.dart';
+import 'package:imtihon3/models/hotel.dart';
 import 'package:imtihon3/services/auth_http_services.dart';
 import 'package:imtihon3/views/screens/profile_screen.dart';
 import 'package:imtihon3/views/widgets/search_view_delegate.dart';
@@ -14,16 +16,16 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  AuthHttpServices authHttpServices = AuthHttpServices();
-
-  Future<void> test() async {
-    var x = await authHttpServices.getHotels();
+  HotelController hotelController = HotelController();
+  List<Hotel> hotelList = [];
+  Future<void> getHotels() async {
+    hotelList = await hotelController.getHotels();
+    setState(() {});
   }
 
-  List<String> data = ['1', '2', '3', '4', '5'];
   @override
   Widget build(BuildContext context) {
-    test();
+    getHotels();
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -57,8 +59,8 @@ class _HomeScreenState extends State<HomeScreen> {
         actions: [
           IconButton(
               onPressed: () async {
-                String? result = await showSearch(
-                    context: context, delegate: SearchViewDelegate(data));
+                await showSearch(
+                    context: context, delegate: SearchViewDelegate(hotelList));
               },
               icon: Icon(
                 Icons.search,

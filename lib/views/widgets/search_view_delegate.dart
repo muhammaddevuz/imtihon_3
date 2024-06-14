@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:imtihon3/models/hotel.dart';
+import 'package:imtihon3/views/screens/hotel_info_screen.dart';
 
 class SearchViewDelegate extends SearchDelegate<String> {
-  final List<String> data;
+  final List<Hotel> data;
 
   SearchViewDelegate(this.data);
 
@@ -34,14 +37,30 @@ class SearchViewDelegate extends SearchDelegate<String> {
   Widget buildSuggestions(BuildContext context) {
     final suggestionList = query.isEmpty
         ? data
-        : data.where((element) => element.contains(query)).toList();
+        : data.where((element) => element.hotelName.contains(query)).toList();
     return ListView.builder(
         itemCount: suggestionList.length,
         itemBuilder: (context, index) {
           return ListTile(
-            title: Text(suggestionList[index]),
+            title: Text(suggestionList[index].hotelName),
+            leading: Container(
+              height: 100.h,
+              width: 50.w,
+              decoration:
+                  BoxDecoration(borderRadius: BorderRadius.circular(50.sp)),
+              clipBehavior: Clip.hardEdge,
+              child: Image.network(
+                suggestionList[index].imageUrl[0],
+                fit: BoxFit.cover,
+              ),
+            ),
+            subtitle: Text(suggestionList[index].description),
             onTap: () {
-              close(context, suggestionList[index]);
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          HotelInfoScreen(hotel: suggestionList[index])));
             },
           );
         });

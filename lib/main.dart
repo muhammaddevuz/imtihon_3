@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:imtihon3/utils/app_constans.dart';
 import 'package:imtihon3/views/screens/splash_screen.dart';
-import 'package:imtihon3/views/screens/login_screen.dart';
 
 void main() {
   runApp(const MyApp());
