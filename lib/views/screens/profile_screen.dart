@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:imtihon3/controllers/user_controller.dart';
+import 'package:imtihon3/models/hotel.dart';
 import 'package:imtihon3/models/user.dart';
 import 'package:imtihon3/utils/app_constans.dart';
+import 'package:imtihon3/views/screens/hotel_info_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ProfileScreen extends StatefulWidget {
   final ValueChanged<void> themChanged;
@@ -18,6 +21,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   User? user;
   DateTime? birthday;
   String? userEmail;
+  List<Hotel> orderedHotels = [];
 
   @override
   void initState() {
@@ -26,7 +30,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   void _loadUserData() async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     user = await userController.getUser();
+    orderedHotels =
+        await userController.fetchUser(sharedPreferences.getString("userId")!);
     setState(() {
       birthday = user!.birthday;
       userEmail = user!.email;
@@ -103,6 +110,48 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         ),
                       ],
                     ),
+                    SizedBox(height: 10.h),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Ordered hotels",
+                          style: TextStyle(
+                            fontSize: 15.h,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                    Column(
+                      children: [
+                        for (var index = 0;
+                            index < orderedHotels.length;
+                            index++)
+                          ListTile(
+                            title: Text(orderedHotels[index].hotelName),
+                            leading: Container(
+                              height: 100.h,
+                              width: 50.w,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(50.sp)),
+                              clipBehavior: Clip.hardEdge,
+                              child: Image.network(
+                                orderedHotels[index].imageUrl[0],
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                            subtitle: Text(orderedHotels[index].description),
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => HotelInfoScreen(
+                                          hotel: orderedHotels[index])));
+                            },
+                          )
+                      ],
+                    )
                   ],
                 ),
               ),
