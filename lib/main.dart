@@ -27,9 +27,10 @@ class _MyAppState extends State<MyApp> {
         minTextAdapt: true,
         splitScreenMode: true,
         child: MaterialApp(
-          debugShowCheckedModeBanner: false,
-          theme: AppConstans.themeCheck ? ThemeData.dark() : ThemeData.light(),
-          home:  SplashScreen(themChanged: changeMode,),
-        ));
+            debugShowCheckedModeBanner: false,
+            theme:
+                AppConstans.themeCheck ? ThemeData.dark() : ThemeData.light(),
+            // home:  SplashScreen(themChanged: changeMode,),
+            home: SplashScreen(themChanged: changeMode)));
   }
 }
