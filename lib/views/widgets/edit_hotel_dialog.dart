@@ -3,28 +3,23 @@ import 'package:imtihon3/controllers/admin/admin_controller.dart';
 
 import '../../models/hotel.dart';
 
-class ManageHotelDialog extends StatefulWidget {
-  final Hotel? hotel;
-  final bool isEdit;
-  final Function() edited;
-  final Function() mainEdited;
+class EditHotelDialog extends StatefulWidget {
+  final Hotel  hotel;
   final Function refresh;
 
-  const ManageHotelDialog({
+
+  const EditHotelDialog({
     super.key,
-    this.hotel,
-    required this.isEdit,
-    required this.edited,
-    required this.mainEdited,
+    required this.hotel,
     required this.refresh
 
   });
 
   @override
-  State<ManageHotelDialog> createState() => _ManageHotelDialogState();
+  State<EditHotelDialog> createState() => _EditHotelDialogState();
 }
 
-class _ManageHotelDialogState extends State<ManageHotelDialog> {
+class _EditHotelDialogState extends State<EditHotelDialog> {
   List<String> amenities = [];
   List<String> comment = [];
   String description = '';
@@ -38,31 +33,33 @@ class _ManageHotelDialogState extends State<ManageHotelDialog> {
   final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
   AdminController adminController = AdminController();
 
-  Future<void> addHotel() async{
-   await AdminController().addHotel(
-      amenities: amenities,
-      comment: comment,
-      hotelName: hotelName,
-      description: description,
-      imageUrl: imageUrl,
-      price: price,
-      rating: rating,
-      rooms: spaceRooms,
-      location: location,
-    );
-  }
+
+
+
+  // void addHotel(amenities,  comment,  hotelName,  description,  imageUrl, price, rating, spaceRooms) async{
+  //   await adminController.addHotel(amenities: amenities, comment: comment, hotelName: hotelName, description: description, imageUrl: imageUrl, price: price, rating: rating, rooms: spaceRooms);
+  // }
 
   @override
   void initState() {
     super.initState();
 
+      amenities = widget.hotel.amenities;
+      comment = widget.hotel.comment;
+      description = widget.hotel.description;
+      hotelName = widget.hotel.hotelName;
+      imageUrl = widget.hotel.imageUrl;
+      price = widget.hotel.price;
+      rating = widget.hotel.rating;
+      spaceRooms = widget.hotel.spaceRooms;
+      location = widget.hotel.location;
   }
 
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: AlertDialog(
-        title: Text(widget.isEdit ? 'Edit hotel' : 'Add hotel'),
+        title: Text('Edit hotel'),
         content: Form(
           key: _formkey,
           child: Column(
@@ -129,6 +126,7 @@ class _ManageHotelDialogState extends State<ManageHotelDialog> {
                 },
               ),
               TextFormField(
+                //initialValue: widget.hotel.description,
                 initialValue: comment.join(','),
                 decoration: const InputDecoration(labelText: 'Comment'),
                 validator: (String? value) {
@@ -223,9 +221,19 @@ class _ManageHotelDialogState extends State<ManageHotelDialog> {
             onPressed: () async {
               if (_formkey.currentState!.validate()) {
                 _formkey.currentState!.save();
-                addHotel();
+
                 widget.refresh();
-                Navigator.pop(context);
+                Navigator.pop(context, {
+                  'newAmenities': amenities,
+                  'newComment': comment,
+                  'newHotelName': hotelName,
+                  'newDescription': description,
+                  'newImageUrl': imageUrl,
+                  'newPrice': price,
+                  'newRating': rating,
+                  'newSpaceRooms': spaceRooms,
+                  'newLocation': location
+                });
               }
             },
             child: const Text('Save'),

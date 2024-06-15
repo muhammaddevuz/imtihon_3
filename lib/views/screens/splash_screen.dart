@@ -7,7 +7,8 @@ import 'package:imtihon3/views/screens/login_screen.dart';
 class SplashScreen extends StatefulWidget {
   final ValueChanged<void> themChanged;
   final Function() edited;
-   SplashScreen({super.key, required this.themChanged, required this.edited});
+  final Function() mainEdited;
+   SplashScreen({super.key, required this.themChanged, required this.edited,required this.mainEdited});
 
   @override
   State<StatefulWidget> createState() {
@@ -21,7 +22,7 @@ class _SplashScreenState extends State<SplashScreen> {
     super.initState();
     Future.delayed(const Duration(seconds: 3), () {
       Navigator.of(context).pushReplacement(MaterialPageRoute(
-        builder: (context) =>  LoginScreen(themChanged: widget.themChanged,edited: widget.edited,),
+        builder: (context) =>  LoginScreen(themChanged: widget.themChanged,edited: widget.edited,mainEdited: widget.mainEdited,),
       ));
     });
   }

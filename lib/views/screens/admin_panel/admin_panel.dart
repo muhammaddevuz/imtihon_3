@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:imtihon3/controllers/admin/admin_controller.dart';
 import 'package:imtihon3/views/screens/admin_panel/user_info_screen.dart';
 import 'package:imtihon3/views/widgets/admin_hotels_widget.dart';
+import 'package:imtihon3/views/widgets/edit_hotel_dialog.dart';
 
 import '../../../models/hotel.dart';
 import '../../../services/admin_panel_http_service.dart';
@@ -11,8 +12,9 @@ import '../../widgets/manage_hotel_dialog.dart';
 class AdminPanel extends StatefulWidget {
   final ValueChanged<void> themChanged;
   final Function() edited;
+  final Function() mainEdited;
 
-  AdminPanel({super.key, required this.themChanged, required this.edited});
+  const AdminPanel({super.key, required this.themChanged, required this.edited,required this.mainEdited});
 
   @override
   State<AdminPanel> createState() => _AdminPanelState();
@@ -21,7 +23,6 @@ class AdminPanel extends StatefulWidget {
 class _AdminPanelState extends State<AdminPanel> {
   final AdminController _adminController = AdminController();
   List<Hotel> _hotels = [];
-
   @override
   void initState() {
     super.initState();
@@ -35,56 +36,47 @@ class _AdminPanelState extends State<AdminPanel> {
     });
   }
 
+  Future<void> addHotelFunc(data) async{
+    await _adminController.addHotel(
+      amenities: data['amenities'],
+      comment: data['comment'],
+      hotelName: data['hotelName'],
+      description: data['description'],
+      imageUrl: data['imageUrl'],
+      price: data['price'],
+      rating: data['rating'],
+      rooms: data['rooms'],
+      location: data['location'],
+    );
+    _loadHotels();
+  }
+  void refresh(){
+    setState(() {
+
+    });
+  }
+
+
   void onAddPressed() async {
     final Map<String, dynamic> data = await showDialog(
       context: context,
       builder: (BuildContext context) => ManageHotelDialog(
+        mainEdited: widget.mainEdited,
         edited: widget.edited,
         isEdit: false,
+        refresh: refresh,
       ),
     );
-    if (data.isNotEmpty) {
-      await _adminController.addHotel(
-          amenities: data['amenities'],
-          comment: data['comment'],
-          hotelName: data['hotelName'],
-          description: data['description'],
-          imageUrl: data['imageUrl'],
-          price: data['price'],
-          rating: data['rating'],
-          rooms: data['rooms'],
-          location: data['location'],
-          );
-      _loadHotels();
-    }
   }
 
-  void onEditPressed(Hotel hotel) async {
-    final Map<String, dynamic> data = await showDialog(
-      context: context,
-      builder: (BuildContext context) => ManageHotelDialog(
-        edited: widget.edited,
-        isEdit: false,
-      ),
-    );
-    if (data.isNotEmpty) {
-      await _adminController.editHotels(
-          hotelId: hotel.hotelId,
-          newAmenities: data['newAmenities'],
-          newComment: data['newComment'],
-          newHotelName: data['newHotelName'],
-          newDescription: data['newDescription'],
-          newImageUrl: data['newImageUrl'],
-          newPrice: data['newPrice'],
-          newRating: data['newRating'],
-          newSpaceRooms: data['newSpaceRooms'],
-          newLocation: data['newLocation']);
-      _loadHotels();
-    }
-  }
+ void editFunc(Map<String, dynamic> response, hotelId) async{
+    _hotelHttpService.editHotels(hotelId: hotelId, newAmenities: response['newAmenities'], newComment: response['newComment'], newHotelName: response['newHotelName'], newDescription: response['newDescription'], newImageUrl: response['newImageUrl'], newPrice: response['newPrice'], newRating: response['newRating'], newSpaceRooms: response['newSpaceRooms'], newLocation: response['newLocation']);
+ }
+
 
   void onDeletePressed({required String hotelId}) async {
     await _adminController.deleteHotel(hotelId: hotelId);
+    refresh();
     _loadHotels();
   }
 
@@ -102,13 +94,6 @@ class _AdminPanelState extends State<AdminPanel> {
         rooms: [7],
         location: '');
   }
-
-  // void refresh(){
-  //   setState(() {
-  //
-  //   });
-  // }
-
   @override
   Widget build(BuildContext context) {
     //test();
@@ -133,7 +118,7 @@ class _AdminPanelState extends State<AdminPanel> {
       drawer: Drawer(
         child: Column(
           children: [
-            DrawerHeader(
+            const DrawerHeader(
                 child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -147,6 +132,7 @@ class _AdminPanelState extends State<AdminPanel> {
                     builder: (context) => AdminPanel(
                       themChanged: (value) {},
                       edited: widget.edited,
+                      mainEdited: widget.mainEdited,
                     ),
                   ),
                 );
@@ -175,7 +161,7 @@ class _AdminPanelState extends State<AdminPanel> {
               future: _adminController.hotelsList,
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Center(
+                  return const Center(
                     child: CircularProgressIndicator(),
                   );
                 }
@@ -196,8 +182,17 @@ class _AdminPanelState extends State<AdminPanel> {
                             onDeletePressed: () {
                               onDeletePressed(hotelId: data[index].hotelId);
                             },
-                            onEditPressed: () {
-                              onEditPressed(data[index]);
+                            onEditPressed: ()async {
+
+                              final Map<String, dynamic> response = await showDialog(
+                                context: context,
+                                builder: (BuildContext context) => EditHotelDialog(
+                                  hotel: data[index],
+                                  refresh: refresh,
+                                ),
+                              );
+                              editFunc(response, data[index].hotelId);
+
                             },
                             hotels: data,
                             index: index,

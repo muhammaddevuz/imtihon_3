@@ -9,8 +9,9 @@ import 'package:imtihon3/views/screens/reset_password_screen.dart';
 import 'admin_panel/admin_panel.dart';
 class LoginScreen extends StatefulWidget {
   final ValueChanged<void> themChanged;
-  final Function()edited;
-   LoginScreen({super.key, required this.themChanged, required this.edited});
+  final Function() edited;
+  final Function() mainEdited;
+   LoginScreen({super.key, required this.themChanged, required this.edited,required this.mainEdited});
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
@@ -38,7 +39,7 @@ class _LoginScreenState extends State<LoginScreen> {
           context,
           MaterialPageRoute(
             builder: (ctx) {
-              return  AdminPanel(themChanged: (void value) {  },edited: widget.edited,);
+              return  AdminPanel(themChanged: (void value) {  },edited: widget.edited,mainEdited: widget.mainEdited,);
             },
           ),
         );
@@ -161,7 +162,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     context,
                     MaterialPageRoute(
                       builder: (ctx) {
-                        return  RegisterScreen(themChanged: widget.themChanged,edited:  widget.edited);
+                        return  RegisterScreen(themChanged: widget.themChanged,edited:  widget.edited,mainEdited: widget.mainEdited,);
                       },
                     ),
                   );

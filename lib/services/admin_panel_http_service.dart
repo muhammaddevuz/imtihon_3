@@ -1,31 +1,42 @@
 import 'dart:convert';
-
 import 'package:http/http.dart' as http;
 import 'package:imtihon3/models/hotel.dart';
 
 class AdminHttpService {
-  Future<List<Hotel>> getHotels() async {
-    final Uri url =
-        Uri.parse('https://imtihon3-default-rtdb.firebaseio.com/hotels.json');
-    final http.Response response = await http.get(url);
-    if (response.statusCode == 200) {
-      final data = jsonDecode(response.body);
 
+  Future<List<Hotel>> getHotels() async {
+    Uri url = Uri.parse("https://imtihon3-default-rtdb.firebaseio.com/hotels.json");
+
+    try {
+      final response = await http.get(url);
+      if (response.statusCode != 200) {
+        throw 'Failed to load hotels';
+      }
+
+      if (response.body == 'null') {
+        return [];
+      }
+
+      final Map<String, dynamic>? data = jsonDecode(response.body);
       if (data == null) {
         return [];
       }
-      List<Hotel> loadedHotels = [];
 
+      List<Hotel> resultList = [];
       data.forEach((key, value) {
-        value['hotelId'] = key;
-        loadedHotels.add(Hotel.fromJson(value));
+        if (value != null && value is Map<String, dynamic>) {
+          value['hotelId'] = key;
+          resultList.add(Hotel.fromJson(value));
+        }
       });
 
-      return loadedHotels;
-    } else {
-      throw Exception('error: HotelHttpService().getHotels');
+      return resultList;
+    } catch (e) {
+      rethrow;
     }
   }
+
+
 
   Future<void> addHotel({
     required List<String> amenities,
@@ -59,14 +70,13 @@ class AdminHttpService {
   }
 
   Future<void> deleteHotel({required String hotelId}) async {
-    print(hotelId);
     final Uri url = Uri.parse(
         'https://imtihon3-default-rtdb.firebaseio.com/hotels/$hotelId.json');
     final response = await http.delete(url);
   }
 
   Future<void> editHotels({
-    required hotelId,
+    required String hotelId,
     required List<String> newAmenities,
     required List<String> newComment,
     required String newHotelName,
@@ -77,23 +87,25 @@ class AdminHttpService {
     required List<int> newSpaceRooms,
     required String newLocation,
   }) async {
-    final Uri url = Uri.parse(
-        'https://imtihon3-default-rtdb.firebaseio.com/hotels/$hotelId.json');
-    Map<String, dynamic> hotelData = {
-      'new_amenities': newAmenities,
-      'new_comment': newComment,
-      'new_hotelName': newHotelName,
-      'new_description': newDescription,
-      'new_image_url': newImageUrl,
-      'new_price': newPrice,
-      'new_rating': newRating,
-      'new_spaceRooms': newSpaceRooms,
-      'new_location':newLocation
-    };
 
+    Hotel updatedHotel = Hotel(
+      hotelId: hotelId,
+      amenities: newAmenities,
+      comment: newComment,
+      hotelName: newHotelName,
+      description: newDescription,
+      imageUrl: newImageUrl,
+      price: newPrice,
+      rating: newRating,
+      spaceRooms: newSpaceRooms,
+      location: newLocation,
+    );
+
+    final Uri url =
+    Uri.parse('https://imtihon3-default-rtdb.firebaseio.com/hotels/$hotelId.json');
     await http.patch(
-      url,
-      body: jsonEncode(hotelData),
+    url,
+    body: jsonEncode(updatedHotel),
     );
   }
 }
