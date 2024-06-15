@@ -23,27 +23,16 @@ class UserHttpServices {
     return loadedTodos[0];
   }
 
-  Future<List<Hotel>> fetchUser(String userId) async {
-    final urlUsers =
-        Uri.parse('https://imtihon3-default-rtdb.firebaseio.com/users.json');
+  Future<List<Hotel>> getOrderedHotels(List orderedHotel) async {
     Uri urlHotels =
         Uri.parse("https://imtihon3-default-rtdb.firebaseio.com/hotels.json");
-    final response = await http.get(urlUsers);
-    if (response.statusCode == 200) {
-      final Map<String, dynamic> data = json.decode(response.body);
-      User? box;
-      data.forEach((key, value) {
-        if (value["userId"] == userId) {
-          value['id'] = key;
-          box = User.fromJson(value);
-        }
-      });
       List<Hotel> orderedHotels = [];
-      if (box != null) {
-        final responseHotels = await http.get(urlHotels);
+      final responseHotels = await http.get(urlHotels);
+
         final Map<String, dynamic> dataHotels =
             json.decode(responseHotels.body);
-        for (var element in box!.orderedHotels) {
+
+        for (var element in orderedHotel) {
           dataHotels.forEach((key, value) {
             if (element == key) {
               value['hotelId'] = key;
@@ -51,10 +40,7 @@ class UserHttpServices {
             }
           });
         }
-      }
       return orderedHotels;
-    }
-    return [];
   }
 
   Future<void> addUser(String email, String userId) async {
@@ -89,4 +75,42 @@ class UserHttpServices {
       body: jsonEncode(todoData),
     );
   }
-}
+
+  Future<void> deleteOrderedHotel(String userId,List orderedHotel, String hotelId) async {
+    print(userId);
+    Uri editUrl = Uri.parse(
+        "https://imtihon3-default-rtdb.firebaseio.com/users/$userId.json");
+    Uri urlHotels =
+        Uri.parse("https://imtihon3-default-rtdb.firebaseio.com/hotels.json");
+      List<Hotel> orderedHotels = [];
+      final responseHotels = await http.get(urlHotels);
+
+        final Map<String, dynamic> dataHotels =
+            json.decode(responseHotels.body);
+
+        for (var element in orderedHotel) {
+          dataHotels.forEach((key, value) {
+            if (element == key) {
+              value['hotelId'] = key;
+              orderedHotels.add(Hotel.fromJson(value));
+            }
+          });
+        }
+      for (var i = 0; i < orderedHotels.length; i++) {
+        if (orderedHotels[i].hotelId == hotelId) {
+          orderedHotels.removeAt(i);
+          break;
+        }
+      }
+      List<String> hotelIdBox = [];
+      for (var i = 0; i < orderedHotels.length; i++) {
+        hotelIdBox.add(orderedHotels[i].hotelId);
+      }
+      print(hotelIdBox);
+      await http.patch(
+        editUrl,
+        body: jsonEncode({"orderedHotels": hotelIdBox}),
+      );
+    }
+  }
+

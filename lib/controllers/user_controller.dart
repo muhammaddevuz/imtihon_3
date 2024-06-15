@@ -12,12 +12,18 @@ class UserController {
     User box = await userHttpServices.getUser();
     return box;
   }
-  Future<List<Hotel>> fetchUser(String userId) async {
-    List<Hotel> box = await userHttpServices.fetchUser(userId);
+
+  Future<List<Hotel>> getOrderedHotels(List orderedHoteld) async {
+    List<Hotel> box = await userHttpServices.getOrderedHotels(orderedHoteld);
     return box;
   }
-  Future<void> editUser(String id,String name,String birthday) async {
+
+  Future<void> deleteOrderedHotel(String userId,List orderedHoteld, String hotelId) async {
+    
+    await userHttpServices.deleteOrderedHotel(userId,orderedHoteld, hotelId);
+  }
+
+  Future<void> editUser(String id, String name, String birthday) async {
     await userHttpServices.editUser(id, name, birthday);
   }
-  
 }
