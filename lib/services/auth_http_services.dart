@@ -1,7 +1,9 @@
 import 'dart:convert';
 
+import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import 'package:imtihon3/controllers/user_controller.dart';
+import 'package:imtihon3/models/hotel.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthHttpServices {

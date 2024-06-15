@@ -6,12 +6,6 @@ import 'package:imtihon3/views/screens/home_screen.dart';
 import 'package:imtihon3/views/screens/register_screen.dart';
 import 'package:imtihon3/views/screens/reset_password_screen.dart';
 
-import 'admin_panel/admin_panel.dart';
-class LoginScreen extends StatefulWidget {
-  final ValueChanged<void> themChanged;
-  final Function() edited;
-  final Function() mainEdited;
-   LoginScreen({super.key, required this.themChanged, required this.edited,required this.mainEdited});
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
@@ -33,13 +27,13 @@ class _LoginScreenState extends State<LoginScreen> {
       setState(() {
         isLoading = true;
       });
-      if (email==Admin.admin['login'] && password==Admin.admin['parol']) {
+      if (email == Admin.admin['login'] && password == Admin.admin['parol']) {
         Navigator.pushReplacement(
           // ignore: use_build_context_synchronously
           context,
           MaterialPageRoute(
             builder: (ctx) {
-              return  AdminPanel(themChanged: (void value) {  },edited: widget.edited,mainEdited: widget.mainEdited,);
+
             },
           ),
         );
@@ -51,7 +45,9 @@ class _LoginScreenState extends State<LoginScreen> {
           context,
           MaterialPageRoute(
             builder: (ctx) {
-              return  HomeScreen(themChanged: widget.themChanged,);
+              return HomeScreen(
+                themChanged: widget.themChanged,
+              );
             },
           ),
         );
@@ -162,7 +158,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     context,
                     MaterialPageRoute(
                       builder: (ctx) {
-                        return  RegisterScreen(themChanged: widget.themChanged,edited:  widget.edited,mainEdited: widget.mainEdited,);
+
                       },
                     ),
                   );
