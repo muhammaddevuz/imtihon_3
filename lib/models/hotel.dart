@@ -12,6 +12,7 @@ class Hotel {
   double price;
   List<int> rating;
   List<int> spaceRooms;
+  String location;
 
   Hotel({
     required this.hotelId,
@@ -23,6 +24,8 @@ class Hotel {
     required this.price,
     required this.rating,
     required this.spaceRooms,
+    required this.location,
+
   });
 
   static Hotel fromJson(Map<String, dynamic> json) {
