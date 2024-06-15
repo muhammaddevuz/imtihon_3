@@ -25,88 +25,115 @@ class _HotelsWidgetState extends State<HotelsWidget> {
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.only(bottom: 10, top: widget.index == 0 ? 15 : 0),
-      padding: const EdgeInsets.all(5),
+      padding: EdgeInsets.only(top: 5.h,bottom: 5.h),
       width: 343.w,
-      height: 172.h,
+      height: 200.h,
       decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10), color: Colors.white),
+        borderRadius: BorderRadius.circular(10),
+        color: Colors.white,
+      ),
       child: Row(
         children: [
           Container(
             width: 114.w,
             height: double.infinity,
-            child: Image(
-              image: NetworkImage(widget.hotels[widget.index].imageUrl[0]),
-              fit: BoxFit.cover,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(10.r),
+                bottomLeft: Radius.circular(10.r),
+              ),
+              image: DecorationImage(
+                image: NetworkImage(widget.hotels[widget.index].imageUrl[0]),
+                fit: BoxFit.cover,
+              ),
             ),
           ),
-          SizedBox(
-            width: 12.w,
-          ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                widget.hotels[widget.index].hotelName,
-                style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w700),
-              ),
-              SizedBox(
-                height: 5.h,
-              ),
-              Text(
-                widget.hotels[widget.index].location,
-                style: TextStyle(fontSize: 14.sp, color: Colors.grey),
-              ),
-              SizedBox(
-                height: 5.h,
-              ),
-              Row(
-                children: [
-                  Icon(
-                    Icons.star,
-                    color: Colors.amber,
-                  ),
-                  Text(
-                    widget.hotels[widget.index].rating[0].toString(),
-                    style: TextStyle(fontSize: 14.sp, color: Colors.grey),
-                  ),
-                  SizedBox(width: 5,),
-                  Text(
-                    '(${widget.hotels[widget.index].description})',
-                    style: TextStyle(fontSize: 14.sp, color: Colors.grey),
-                  ),
-                ],
-              ),
-              SizedBox(
-                height: 5.h,
-              ),Row(children: [...List.generate(widget.hotels[widget.index].amenities.length, (int index){
-                return SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Text(
-                    widget.hotels[widget.index].amenities[index],
-                    style: TextStyle(fontSize: 14.sp, color: Colors.grey),
-                  ),
-                );
-              }),],),
-              Row(
-                children: <Widget>[
-                  IconButton(
-                    onPressed: widget.onEditPressed,
-                    icon: const Icon(
-                      Icons.edit,
-                      color: Colors.blue,
+          SizedBox(width: 12.w),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  widget.hotels[widget.index].hotelName,
+                  style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w700),
+                ),
+                SizedBox(height: 5.h),
+                Text(
+                  widget.hotels[widget.index].location,
+                  style: TextStyle(fontSize: 16.sp,),
+                ),
+                SizedBox(height: 5.h),
+                Row(
+                  children: [
+                    Icon(
+                      Icons.star,
+                      color: Colors.amber,
+                    ),
+                    Text(
+                      widget.hotels[widget.index].rating[0].toString(),
+                      style: TextStyle(fontSize: 14.sp),
+                    ),
+                    SizedBox(width: 5),
+                    Expanded(
+                      child: Text(
+                        '(${widget.hotels[widget.index].description})',
+                        style: TextStyle(fontSize: 14.sp),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 5.h),
+                Expanded(
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      children:
+                      List.generate(
+                        widget.hotels[widget.index].amenities.length,
+                            (int index) {
+                          return Padding(
+                            padding: const EdgeInsets.only(right: 8.0),
+                            child: Text(
+                              "${widget.hotels[widget.index].amenities[index]}",
+                              style: TextStyle(
+                                fontSize: 14.sp,
+                              ),
+                            ),
+                          );
+                        },
+                      ),
                     ),
                   ),
-                  IconButton(
-                    onPressed: widget.onDeletePressed,
-                    icon: const Icon(
-                      Icons.delete,
-                      color: Colors.red,
+                ),
+                SizedBox(height: 5,),
+                Text("Space rooms: ${widget.hotels[widget.index].spaceRooms[0].toString()}"),
+                SizedBox(height: 5.h),
+                Text(
+                  '\$${widget.hotels[widget.index].price}/night',
+                  style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w700),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    IconButton(
+                      onPressed: widget.onEditPressed,
+                      icon: const Icon(
+                        Icons.edit,
+                        color: Colors.blue,
+                      ),
                     ),
-                  ),
-                ],
-              ),
-            ],
+                    IconButton(
+                      onPressed: widget.onDeletePressed,
+                      icon: const Icon(
+                        Icons.delete,
+                        color: Colors.red,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
         ],
       ),
