@@ -31,7 +31,7 @@ class _MyAppState extends State<MyApp> {
         child: MaterialApp(
           debugShowCheckedModeBanner: false,
           theme: AppConstans.themeCheck ? ThemeData.dark() : ThemeData.light(),
-          //home:  SplashScreen(themChanged: changeMode,),
+          //home:  SplashScreen(themChanged: changeMode, edited: () {  }, mainEdited: () {  },),
           home: AdminPanel(themChanged: (void value) {  }, edited: changed, mainEdited: () {  },),
         ));
   }

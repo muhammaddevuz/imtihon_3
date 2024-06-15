@@ -7,7 +7,7 @@ import 'package:imtihon3/views/widgets/edit_hotel_dialog.dart';
 
 import '../../../models/hotel.dart';
 import '../../../services/admin_panel_http_service.dart';
-import '../../widgets/manage_hotel_dialog.dart';
+import '../../widgets/add_hotel_dialog.dart';
 
 class AdminPanel extends StatefulWidget {
   final ValueChanged<void> themChanged;
@@ -60,7 +60,7 @@ class _AdminPanelState extends State<AdminPanel> {
   void onAddPressed() async {
     final Map<String, dynamic> data = await showDialog(
       context: context,
-      builder: (BuildContext context) => ManageHotelDialog(
+      builder: (BuildContext context) => AddHotelDialog(
         mainEdited: widget.mainEdited,
         edited: widget.edited,
         isEdit: false,

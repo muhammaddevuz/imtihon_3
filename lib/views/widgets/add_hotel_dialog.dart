@@ -3,14 +3,14 @@ import 'package:imtihon3/controllers/admin/admin_controller.dart';
 
 import '../../models/hotel.dart';
 
-class ManageHotelDialog extends StatefulWidget {
+class AddHotelDialog extends StatefulWidget {
   final Hotel? hotel;
   final bool isEdit;
   final Function() edited;
   final Function() mainEdited;
   final Function refresh;
 
-  const ManageHotelDialog({
+  const AddHotelDialog({
     super.key,
     this.hotel,
     required this.isEdit,
@@ -21,10 +21,10 @@ class ManageHotelDialog extends StatefulWidget {
   });
 
   @override
-  State<ManageHotelDialog> createState() => _ManageHotelDialogState();
+  State<AddHotelDialog> createState() => _AddHotelDialogState();
 }
 
-class _ManageHotelDialogState extends State<ManageHotelDialog> {
+class _AddHotelDialogState extends State<AddHotelDialog> {
   List<String> amenities = [];
   List<String> comment = [];
   String description = '';
@@ -37,6 +37,21 @@ class _ManageHotelDialogState extends State<ManageHotelDialog> {
 
   final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
   AdminController adminController = AdminController();
+
+  // @override
+  // void initState() {
+  //   super.initState();
+  //
+  //   amenities = widget.hotel!.amenities;
+  //   comment = widget.hotel!.comment;
+  //   description = widget.hotel!.description;
+  //   hotelName = widget.hotel!.hotelName;
+  //   imageUrl = widget.hotel!.imageUrl;
+  //   price = widget.hotel!.price;
+  //   rating = widget.hotel!.rating;
+  //   spaceRooms = widget.hotel!.spaceRooms;
+  //   location = widget.hotel!.location;
+  // }
 
   Future<void> addHotel() async{
    await AdminController().addHotel(
@@ -129,21 +144,6 @@ class _ManageHotelDialogState extends State<ManageHotelDialog> {
                 },
               ),
               TextFormField(
-                initialValue: comment.join(','),
-                decoration: const InputDecoration(labelText: 'Comment'),
-                validator: (String? value) {
-                  if (value == null || value.trim().isEmpty) {
-                    return 'Enter something!';
-                  }
-                  return null;
-                },
-                onSaved: (String? newValue) {
-                  if (newValue != null) {
-                    comment = newValue.split(',');
-                  }
-                },
-              ),
-              TextFormField(
                 keyboardType: TextInputType.number,
                 //initialValue: widget.hotel.description,
                 initialValue: price.toString(),
@@ -161,8 +161,9 @@ class _ManageHotelDialogState extends State<ManageHotelDialog> {
                 },
               ),
               TextFormField(
+                keyboardType: TextInputType.number,
                 initialValue: rating.join(','),
-                decoration: const InputDecoration(labelText: 'Comment'),
+                decoration: const InputDecoration(labelText: 'Rating'),
                 validator: (String? value) {
                   if (value == null || value.trim().isEmpty) {
                     return 'Enter something!';
@@ -180,7 +181,7 @@ class _ManageHotelDialogState extends State<ManageHotelDialog> {
               ),
               TextFormField(
                 initialValue: spaceRooms.join(','),
-                decoration: const InputDecoration(labelText: 'SpaceRooms'),
+                decoration: const InputDecoration(labelText: 'Space rooms'),
                 validator: (String? value) {
                   if (value == null || value.trim().isEmpty) {
                     return 'Enter something!';
