@@ -252,7 +252,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                             fontWeight: FontWeight.bold),
                                       ),
                                       Text(
-                                        "/night",
+                                        "/night ",
                                         style: TextStyle(fontSize: 14),
                                       )
                                     ],
