@@ -2,7 +2,8 @@ import 'dart:convert';
 
 import 'package:imtihon3/models/hotel.dart';
 import 'package:http/http.dart' as http;
-class HotelHttpServices{
+
+class HotelHttpServices {
   //golib has edited this
   Future<List<Hotel>> getHotels() async {
     Uri url =

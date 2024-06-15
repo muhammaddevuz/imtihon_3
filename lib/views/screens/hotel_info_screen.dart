@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:imtihon3/controllers/user_controller.dart';
 import 'package:imtihon3/functions/review_calculator.dart';
 import 'package:imtihon3/models/hotel.dart';
 
@@ -13,6 +14,7 @@ class HotelInfoScreen extends StatefulWidget {
 }
 
 class _HotelInfoScreenState extends State<HotelInfoScreen> {
+  UserController userController = UserController();
   int i = 0;
 
   void toggleImage() {
@@ -37,6 +39,7 @@ class _HotelInfoScreenState extends State<HotelInfoScreen> {
         child: Padding(
           padding: const EdgeInsets.all(10),
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               InkWell(
                 onTap: () {
@@ -141,9 +144,11 @@ class _HotelInfoScreenState extends State<HotelInfoScreen> {
                           fontSize: 18.sp,
                           fontWeight: FontWeight.w700),
                     ),
+                    SizedBox(height: 10.h),
                     SizedBox(
                       height: 200.h,
                       child: GridView.builder(
+                        physics: NeverScrollableScrollPhysics(),
                         itemCount: widget.hotel.amenities.length,
                         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                           mainAxisSpacing: 10.sp,
@@ -166,6 +171,51 @@ class _HotelInfoScreenState extends State<HotelInfoScreen> {
                         },
                       ),
                     ),
+                    Text(
+                      "Comments",
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 18.sp,
+                          fontWeight: FontWeight.w700),
+                    ),
+                    SizedBox(
+                      height: 150.h,
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: SingleChildScrollView(
+                              scrollDirection: Axis.horizontal,
+                              child: Row(
+                                children: List.generate(
+                                    widget.hotel.comment.length, (int index) {
+                                  return Container(
+                                    margin: EdgeInsets.only(right: 20.w),
+                                    width: 140.w,
+                                    padding: EdgeInsets.all(20.sp),
+                                    decoration: BoxDecoration(
+                                      borderRadius:
+                                          BorderRadius.circular(10.sp),
+                                      border: Border.all(color: Colors.grey),
+                                    ),
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        const CircleAvatar(
+                                          child: Icon(Icons.person),
+                                        ),
+                                        SizedBox(height: 10.h),
+                                        Text(widget.hotel.comment[index]),
+                                      ],
+                                    ),
+                                  );
+                                }),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    )
                   ],
                 ),
               ),

@@ -30,7 +30,6 @@ class _MyAppState extends State<MyApp> {
             debugShowCheckedModeBanner: false,
             theme:
                 AppConstans.themeCheck ? ThemeData.dark() : ThemeData.light(),
-            // home:  SplashScreen(themChanged: changeMode,),
             home: SplashScreen(themChanged: changeMode)));
   }
 }
