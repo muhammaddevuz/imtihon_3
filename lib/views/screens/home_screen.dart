@@ -39,6 +39,17 @@ class _HomeScreenState extends State<HomeScreen> {
           SizedBox(width: 10)
         ],
       ),
+      body: Padding(
+        padding: EdgeInsets.all(20),
+        child: Column(
+          children: [
+            Row(
+              children: [
+              ],
+            )
+          ],
+        )
+      ),
     );
   }
 }
