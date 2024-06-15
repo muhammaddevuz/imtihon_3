@@ -28,7 +28,7 @@ class _HomeScreenState extends State<HomeScreen> {
   List<Hotel> filteredHotelList = [];
   bool isDataCame = false;
   bool flag = true;
-  String selectedFilter = 'All';
+  String selectedFilter = 'Rating';
 
   double averageRating(List<int> ratings){
     var sum = 0;
@@ -70,9 +70,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void filterHotels(String filter) {
     setState(() {
-      if (filter == 'All') {
-        filteredHotelList = List.from(hotelList);
-      } else if (filter == 'Rating') {
+      if (filter == 'Rating') {
         filteredHotelList.sort((a, b) => averageRating(b.rating).compareTo(averageRating(a.rating)));
       } else if (filter == 'Price') {
         filteredHotelList.sort((a, b) => b.price.compareTo(a.price));
@@ -137,11 +135,11 @@ class _HomeScreenState extends State<HomeScreen> {
               children: [
                 DropdownButton<String>(
                   value: selectedFilter,
-                  items: <String>['All', 'Rating', 'Price']
+                  items: <String>['Rating', 'Price']
                       .map((String value) {
                     return DropdownMenuItem<String>(
                       value: value,
-                      child: Text(value),
+                      child: Text(value, style: TextStyle(fontSize: 14),),
                     );
                   }).toList(),
                   onChanged: (newValue) {
