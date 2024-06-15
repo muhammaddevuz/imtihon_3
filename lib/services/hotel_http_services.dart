@@ -2,8 +2,8 @@ import 'dart:convert';
 
 import 'package:imtihon3/models/hotel.dart';
 import 'package:http/http.dart' as http;
-class HotelHttpServices{
-  //golib has edited this
+
+class HotelHttpServices {
   Future<List<Hotel>> getHotels() async {
     Uri url =
         Uri.parse("https://imtihon3-default-rtdb.firebaseio.com/hotels.json");
@@ -21,6 +21,7 @@ class HotelHttpServices{
         value['hotelId'] = key;
         resultList.add(Hotel.fromJson(value));
       });
+      print(data);
 
       return resultList;
     } catch (e) {
