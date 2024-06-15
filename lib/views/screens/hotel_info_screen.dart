@@ -1,8 +1,9 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:imtihon3/controllers/user_controller.dart';
 import 'package:imtihon3/functions/review_calculator.dart';
 import 'package:imtihon3/models/hotel.dart';
+import 'package:imtihon3/models/user.dart';
 
 class HotelInfoScreen extends StatefulWidget {
   final Hotel hotel;
@@ -13,7 +14,11 @@ class HotelInfoScreen extends StatefulWidget {
 }
 
 class _HotelInfoScreenState extends State<HotelInfoScreen> {
+  UserController userController = UserController();
+  final _formKey = GlobalKey<FormState>();
+  final _commentController = TextEditingController();
   int i = 0;
+  bool isLoading = true;
 
   void toggleImage() {
     if (i + 1 < widget.hotel.imageUrl.length - 1) {
@@ -24,6 +29,22 @@ class _HotelInfoScreenState extends State<HotelInfoScreen> {
     setState(() {});
   }
 
+  void refresh() {
+    setState(() {});
+  }
+
+  void onSubmit() async {
+    if (_formKey.currentState!.validate()) {
+      _formKey.currentState!.save();
+      await userController.addComment(
+          _commentController.text, widget.hotel.hotelId);
+      _formKey.currentState!.dispose();
+      _commentController.clear();
+      Navigator.of(context).pop();
+      setState(() {});
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -31,12 +52,13 @@ class _HotelInfoScreenState extends State<HotelInfoScreen> {
         title: const Text('Hotel detail'),
         leading: IconButton(
             onPressed: () => Navigator.of(context).pop(),
-            icon: Icon(Icons.arrow_back_ios)),
+            icon: const Icon(Icons.arrow_back_ios)),
       ),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(10),
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               InkWell(
                 onTap: () {
@@ -128,7 +150,7 @@ class _HotelInfoScreenState extends State<HotelInfoScreen> {
                               fontSize: 18.sp),
                         ),
                         Text(
-                          widget.hotel.location,
+                          widget.hotel.description,
                           style: TextStyle(
                               fontWeight: FontWeight.w400, fontSize: 14.sp),
                         ),
@@ -141,9 +163,11 @@ class _HotelInfoScreenState extends State<HotelInfoScreen> {
                           fontSize: 18.sp,
                           fontWeight: FontWeight.w700),
                     ),
+                    SizedBox(height: 10.h),
                     SizedBox(
                       height: 200.h,
                       child: GridView.builder(
+                        physics: const NeverScrollableScrollPhysics(),
                         itemCount: widget.hotel.amenities.length,
                         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                           mainAxisSpacing: 10.sp,
@@ -166,6 +190,200 @@ class _HotelInfoScreenState extends State<HotelInfoScreen> {
                         },
                       ),
                     ),
+                    Text(
+                      "Comments",
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 18.sp,
+                          fontWeight: FontWeight.w700),
+                    ),
+                    Container(
+                      padding: EdgeInsets.only(top: 10.h),
+                      height: 150.h,
+                      child: Row(
+                        children: [
+                          Container(
+                            margin: EdgeInsets.only(right: 20.w),
+                            width: 140.w,
+                            padding: EdgeInsets.all(20.sp),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10.sp),
+                              border: Border.all(color: Colors.grey),
+                            ),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                CircleAvatar(
+                                  child: IconButton(
+                                      onPressed: () {
+                                        showModalBottomSheet(
+                                          context: context,
+                                          builder: (BuildContext context) {
+                                            return Center(
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.all(17.0),
+                                                child: Column(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  mainAxisSize:
+                                                      MainAxisSize.min,
+                                                  children: [
+                                                    Form(
+                                                      key: _formKey,
+                                                      child: TextFormField(
+                                                        controller:
+                                                            _commentController,
+                                                        decoration:
+                                                            const InputDecoration(
+                                                                border:
+                                                                    OutlineInputBorder()),
+                                                        validator: (value) {
+                                                          if (value == null) {
+                                                            return 'Please enter comment';
+                                                          }
+                                                          return null;
+                                                        },
+                                                      ),
+                                                    ),
+                                                    SizedBox(height: 10.h),
+                                                    InkWell(
+                                                      onTap: () async {
+                                                        onSubmit();
+                                                      },
+                                                      child: Container(
+                                                        decoration: BoxDecoration(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        7.sp),
+                                                            color:
+                                                                Colors.amber),
+                                                        width: double.infinity,
+                                                        padding: EdgeInsets.all(
+                                                            10.sp),
+                                                        child: Text(
+                                                          "Add comment",
+                                                          style: TextStyle(
+                                                              fontSize: 15.sp,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w500),
+                                                          textAlign:
+                                                              TextAlign.center,
+                                                        ),
+                                                      ),
+                                                    )
+                                                  ],
+                                                ),
+                                              ),
+                                            );
+                                          },
+                                        );
+                                      },
+                                      icon: const Icon(Icons.add)),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Expanded(
+                            child: SingleChildScrollView(
+                              scrollDirection: Axis.horizontal,
+                              child: Row(
+                                children: List.generate(
+                                    widget.hotel.comment.length, (int index) {
+                                  return Container(
+                                    margin: EdgeInsets.only(right: 20.w),
+                                    width: 140.w,
+                                    padding: EdgeInsets.all(20.sp),
+                                    decoration: BoxDecoration(
+                                      borderRadius:
+                                          BorderRadius.circular(10.sp),
+                                      border: Border.all(color: Colors.grey),
+                                    ),
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        const CircleAvatar(
+                                          child: Icon(Icons.person),
+                                        ),
+                                        SizedBox(height: 10.h),
+                                        Text(widget.hotel.comment[index]),
+                                      ],
+                                    ),
+                                  );
+                                }),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(height: 10.h),
+                    Text(
+                      'Location',
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 18.sp,
+                          fontWeight: FontWeight.w700),
+                    ),
+                    SizedBox(height: 10.h),
+                    Container(
+                      clipBehavior: Clip.hardEdge,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20.sp)),
+                      child: Image.asset(
+                        'assets/images/location.png',
+                        width: double.infinity,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                    SizedBox(
+                      height: 10.h,
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(left: 10.w, right: 20.w),
+                      child: Text(
+                        textAlign: TextAlign.left,
+                        'Dago Pakar Villa P4-16, Jl. Dago Pakar Permai IV No.16, Mekarsaluyu, Cimenyan, Bandung Regency, West Java 40198',
+                        style: TextStyle(color: Colors.grey.shade800),
+                      ),
+                    ),
+                    SizedBox(height: 10.h),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Start From',
+                              style: TextStyle(
+                                  color: const Color(0xFF858789),
+                                  fontSize: 12.sp,
+                                  fontWeight: FontWeight.w400),
+                            ),
+                            Text(
+                              "\$${widget.hotel.price} / night",
+                              style: const TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w600),
+                            )
+                          ],
+                        ),
+                        FilledButton(
+                            onPressed: () async {
+                              User user = await userController.getUser();
+                              await userController.addOrderedHotel(
+                                  user.userId, widget.hotel.hotelId);
+                            },
+                            child: Padding(
+                              padding: EdgeInsets.all(5.sp),
+                              child: const Text('Reserve'),
+                            ))
+                      ],
+                    )
                   ],
                 ),
               ),

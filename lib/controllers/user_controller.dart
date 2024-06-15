@@ -11,7 +11,16 @@ class UserController {
     User box = await userHttpServices.getUser();
     return box;
   }
-  Future<void> editUser(String id,String name,String birthday) async {
+
+  Future<void> editUser(String id, String name, String birthday) async {
     await userHttpServices.editUser(id, name, birthday);
+  }
+
+  Future<void> addComment(String comment, String hotelId) async {
+    await userHttpServices.addComment(comment, hotelId);
+  }
+
+  Future<void> addOrderedHotel(String userId, String hotelId) async {
+    await userHttpServices.addOrderedHotel(userId, hotelId);
   }
 }
