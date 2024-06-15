@@ -12,9 +12,11 @@ class Hotel {
   double price;
   List<int> rating;
   List<int> spaceRooms;
+  String location;
 
   Hotel({
     required this.hotelId,
+    required this.location,
     required this.amenities,
     required this.comment,
     required this.description,
