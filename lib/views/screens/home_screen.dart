@@ -25,8 +25,18 @@ class _HomeScreenState extends State<HomeScreen> {
   HotelController hotelController = HotelController();
   UserController userController = UserController();
   List<Hotel> hotelList = [];
+  List<Hotel> filteredHotelList = [];
   bool isDataCame = false;
   bool flag = true;
+  String selectedFilter = 'All';
+
+  double averageRating(List<int> ratings){
+    var sum = 0;
+    for(var rating in ratings){
+      sum += rating;
+    }
+    return sum/ratings.length;
+  }
 
   @override
   void initState() {
@@ -42,6 +52,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Future<void> getHotels() async {
     hotelList = await hotelController.getHotels();
+    filteredHotelList = List.from(hotelList);
     isDataCame = true;
     setState(() {});
   }
@@ -49,13 +60,24 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<void> getUser() async {
     User user = await userController.getUser();
     User x = await userController.fetchUser(user.userId);
-    print("Javob------------------------");
     print(x.orderedHotels);
   }
 
   void showAllHotels() async {
-    hotelList = await hotelController.getHotels();
+    filteredHotelList = await hotelController.getHotels();
     setState(() {});
+  }
+
+  void filterHotels(String filter) {
+    setState(() {
+      if (filter == 'All') {
+        filteredHotelList = List.from(hotelList);
+      } else if (filter == 'Rating') {
+        filteredHotelList.sort((a, b) => averageRating(b.rating).compareTo(averageRating(a.rating)));
+      } else if (filter == 'Price') {
+        filteredHotelList.sort((a, b) => b.price.compareTo(a.price));
+      }
+    });
   }
 
   @override
@@ -113,11 +135,25 @@ class _HomeScreenState extends State<HomeScreen> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(""),
+                DropdownButton<String>(
+                  value: selectedFilter,
+                  items: <String>['All', 'Rating', 'Price']
+                      .map((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value),
+                    );
+                  }).toList(),
+                  onChanged: (newValue) {
+                    setState(() {
+                      selectedFilter = newValue!;
+                      filterHotels(selectedFilter);
+                    });
+                  },
+                ),
                 ZoomTapAnimation(
                   onTap: () => isScroll(),
-                  child:
-                      flag ? Text("Show All") : Icon(Icons.exit_to_app_sharp),
+                  child: flag ? Text("Show All") : Icon(Icons.exit_to_app_sharp),
                 ),
               ],
             ),
@@ -136,198 +172,198 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: Text("No Data"),
                   );
                 }
-                final List<Hotel> data = snapshot.data!;
+                final List<Hotel> data = filteredHotelList;
                 return flag == true
                     ? GridView.builder(
-                        itemCount: data.length,
-                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          childAspectRatio: 0.55,
-                          crossAxisCount: 2,
+                  itemCount: data.length,
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    childAspectRatio: 0.55,
+                    crossAxisCount: 2,
+                  ),
+                  itemBuilder: (context, index) {
+                    return InkWell(
+                      onTap: () => Navigator.push(context,
+                          MaterialPageRoute(builder: (context) {
+                            return HotelInfoScreen(hotel: data[index]);
+                          })),
+                      child: Container(
+                        margin: EdgeInsets.fromLTRB(10, 10, 10, 0),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          border: Border.all(color: Colors.grey),
                         ),
-                        itemBuilder: (context, index) {
-                          return InkWell(
-                            onTap: () => Navigator.push(context,
-                                MaterialPageRoute(builder: (context) {
-                              return HotelInfoScreen(hotel: data[index]);
-                            })),
-                            child: Container(
-                              margin: EdgeInsets.fromLTRB(10, 10, 10, 0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Container(
+                              height: 200.h,
+                              width: double.infinity,
                               decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                border: Border.all(color: Colors.grey),
-                              ),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Container(
-                                    height: 200.h,
-                                    width: double.infinity,
-                                    decoration: BoxDecoration(
-                                        image: DecorationImage(
-                                          image: NetworkImage(
-                                              data[index].imageUrl[0]),
-                                          fit: BoxFit.cover,
-                                        ),
-                                        borderRadius: BorderRadius.only(
-                                          topLeft: Radius.circular(10),
-                                          topRight: Radius.circular(10),
-                                        )),
+                                  image: DecorationImage(
+                                    image: NetworkImage(
+                                        data[index].imageUrl[0]),
+                                    fit: BoxFit.cover,
                                   ),
-                                  Container(
-                                    padding: EdgeInsets.all(10),
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
+                                  borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(10),
+                                    topRight: Radius.circular(10),
+                                  )),
+                            ),
+                            Container(
+                              padding: EdgeInsets.all(10),
+                              child: Column(
+                                crossAxisAlignment:
+                                CrossAxisAlignment.start,
+                                mainAxisAlignment:
+                                MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    data[index].hotelName,
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 19),
+                                  ),
+                                  Text(
+                                    data[index].location,
+                                    style: TextStyle(color: Colors.grey),
+                                  ),
+                                  Row(
+                                    children: [
+                                      Icon(
+                                        Icons.star_half,
+                                        color: Colors.amber,
+                                        size: 15.h,
+                                      ),
+                                      Text(
+                                        "${(ReviewCalculator(hotel: data[index]).reviewCalculate).toStringAsFixed(2)} (${data[index].rating.length} Reviews)",
+                                        style: TextStyle(fontSize: 12.sp),
+                                      ),
+                                    ],
+                                  ),
+                                  Row(
+                                    children: [
+                                      Icon(
+                                        CupertinoIcons.money_dollar,
+                                        size: 14,
+                                        color: Colors.green,
+                                      ),
+                                      Text(
+                                        "${data[index].price}",
+                                        style: TextStyle(
+                                            fontSize: 17,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      Text(
+                                        "/night",
+                                        style: TextStyle(fontSize: 14),
+                                      )
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                )
+                    : ListView.builder(
+                  itemCount: data.length,
+                  itemBuilder: (context, index) {
+                    return InkWell(
+                      onTap: () => Navigator.push(context,
+                          MaterialPageRoute(builder: (context) {
+                            return HotelInfoScreen(hotel: data[index]);
+                          })),
+                      child: Container(
+                        margin: EdgeInsets.all(10),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          border: Border.all(color: Colors.grey),
+                        ),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Container(
+                              height: 170.h,
+                              width: 110.w,
+                              decoration: BoxDecoration(
+                                  image: DecorationImage(
+                                    image: NetworkImage(
+                                        data[index].imageUrl[0]),
+                                    fit: BoxFit.cover,
+                                  ),
+                                  borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(10),
+                                    bottomLeft: Radius.circular(10),
+                                  )),
+                            ),
+                            Expanded(
+                              child: Padding(
+                                padding: EdgeInsets.all(10),
+                                child: Column(
+                                  mainAxisAlignment:
+                                  MainAxisAlignment.spaceBetween,
+                                  crossAxisAlignment:
+                                  CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      data[index].hotelName,
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 20),
+                                    ),
+                                    Text(
+                                      data[index].location,
+                                      style:
+                                      TextStyle(color: Colors.grey),
+                                    ),
+                                    Row(
                                       children: [
-                                        Text(
-                                          data[index].hotelName,
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 19),
+                                        Icon(
+                                          Icons.star_half,
+                                          size: 17,
+                                          color: Colors.amber,
                                         ),
                                         Text(
-                                          data[index].location,
-                                          style: TextStyle(color: Colors.grey),
-                                        ),
-                                        Row(
-                                          children: [
-                                            Icon(
-                                              Icons.star_half,
-                                              color: Colors.amber,
-                                              size: 15.h,
-                                            ),
-                                            Text(
-                                              "${(ReviewCalculator(hotel: data[index]).reviewCalculate).toStringAsFixed(2)} (${data[index].rating.length} Reviews)",
-                                              style: TextStyle(fontSize: 12.sp),
-                                            ),
-                                          ],
-                                        ),
-                                        Row(
-                                          children: [
-                                            Icon(
-                                              CupertinoIcons.money_dollar,
-                                              size: 14,
-                                              color: Colors.green,
-                                            ),
-                                            Text(
-                                              "${data[index].price}",
-                                              style: TextStyle(
-                                                  fontSize: 17,
-                                                  fontWeight: FontWeight.bold),
-                                            ),
-                                            Text(
-                                              "/night",
-                                              style: TextStyle(fontSize: 14),
-                                            )
-                                          ],
+                                          "${(ReviewCalculator(hotel: data[index]).reviewCalculate).toStringAsFixed(2)} (${data[index].rating.length} Reviews)",
+                                          style:
+                                          TextStyle(fontSize: 12.sp),
                                         ),
                                       ],
                                     ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          );
-                        },
-                      )
-                    : ListView.builder(
-                        itemCount: data.length,
-                        itemBuilder: (context, index) {
-                          return InkWell(
-                            onTap: () => Navigator.push(context,
-                                MaterialPageRoute(builder: (context) {
-                              return HotelInfoScreen(hotel: data[index]);
-                            })),
-                            child: Container(
-                              margin: EdgeInsets.all(10),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                border: Border.all(color: Colors.grey),
-                              ),
-                              child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Container(
-                                    height: 170.h,
-                                    width: 110.w,
-                                    decoration: BoxDecoration(
-                                        image: DecorationImage(
-                                          image: NetworkImage(
-                                              data[index].imageUrl[0]),
-                                          fit: BoxFit.cover,
+                                    Row(
+                                      children: [
+                                        Icon(
+                                          CupertinoIcons.money_dollar,
+                                          color: Colors.green,
+                                          size: 14,
                                         ),
-                                        borderRadius: BorderRadius.only(
-                                          topLeft: Radius.circular(10),
-                                          bottomLeft: Radius.circular(10),
-                                        )),
-                                  ),
-                                  Expanded(
-                                    child: Padding(
-                                      padding: EdgeInsets.all(10),
-                                      child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            data[index].hotelName,
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 20),
-                                          ),
-                                          Text(
-                                            data[index].location,
-                                            style:
-                                                TextStyle(color: Colors.grey),
-                                          ),
-                                          Row(
-                                            children: [
-                                              Icon(
-                                                Icons.star_half,
-                                                size: 17,
-                                                color: Colors.amber,
-                                              ),
-                                              Text(
-                                                "${(ReviewCalculator(hotel: data[index]).reviewCalculate).toStringAsFixed(2)} (${data[index].rating.length} Reviews)",
-                                                style:
-                                                    TextStyle(fontSize: 12.sp),
-                                              ),
-                                            ],
-                                          ),
-                                          Row(
-                                            children: [
-                                              Icon(
-                                                CupertinoIcons.money_dollar,
-                                                color: Colors.green,
-                                                size: 14,
-                                              ),
-                                              Text(
-                                                "${data[index].price}",
-                                                style: TextStyle(
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: 17),
-                                              ),
-                                              Text(
-                                                "/night",
-                                                style: TextStyle(
-                                                    fontSize: 14,
-                                                    color: Colors.grey),
-                                              )
-                                            ],
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                ],
+                                        Text(
+                                          "${data[index].price}",
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 17),
+                                        ),
+                                        Text(
+                                          "/night",
+                                          style: TextStyle(
+                                              fontSize: 14,
+                                              color: Colors.grey),
+                                        )
+                                      ],
+                                    )
+                                  ],
+                                ),
                               ),
                             ),
-                          );
-                        },
-                      );
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                );
               },
             ),
           ),
