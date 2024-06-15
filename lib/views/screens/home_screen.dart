@@ -37,7 +37,7 @@ class _HomeScreenState extends State<HomeScreen> {
     }
     return sum/ratings.length;
   }
-
+  
   @override
   void initState() {
     super.initState();
