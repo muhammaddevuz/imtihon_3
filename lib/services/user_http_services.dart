@@ -22,6 +22,20 @@ class UserHttpServices {
     }
     return loadedTodos[0];
   }
+  Future<List<User>> getUsers() async {
+    Uri url =
+        Uri.parse("https://imtihon3-default-rtdb.firebaseio.com/users.json");
+    final response = await http.get(url);
+    final data = jsonDecode(response.body);
+    List<User> loadedUsers = [];
+    if (data != null) {
+      data.forEach((key, value) {
+          value['id'] = key;
+          loadedUsers.add(User.fromJson(value));
+      });
+    }
+    return loadedUsers;
+  }
 
   Future<List<Hotel>> getOrderedHotels(List orderedHotel) async {
     Uri urlHotels =
