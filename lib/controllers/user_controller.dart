@@ -6,7 +6,10 @@ class UserController {
   Future<void> addUser(String email, String userId) async {
     await userHttpServices.addUser(email, userId);
   }
-
+  Future<User> fetchUser(String userId)async{
+    User user = await userHttpServices.fetchUser(userId);
+    return user;
+  }
   Future<User> getUser() async {
     User box = await userHttpServices.getUser();
     return box;

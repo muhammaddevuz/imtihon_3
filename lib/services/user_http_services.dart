@@ -5,6 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class UserHttpServices {
   Future<User> getUser() async {
+
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     Uri url =
         Uri.parse("https://imtihon3-default-rtdb.firebaseio.com/users.json");
@@ -20,6 +21,17 @@ class UserHttpServices {
       });
     }
     return loadedTodos[0];
+  }
+
+  Future<User> fetchUser(String userId) async{
+    final url = Uri.parse('https://imtihon3-default-rtdb.firebaseio.com/users.json');
+    final response = await http.get(url);
+    if(response.statusCode == 200){
+      final Map<String, dynamic> data = json.decode(response.body);
+        User user = data.values.firstWhere((user) => user['userId'] == userId);
+        return user;
+    }
+    return User(id: 'id', userId: userId, name: 'name', email: 'email', birthday: DateTime.now(), orderedHotels: ['orderedHotels']);
   }
 
   Future<void> addUser(String email, String userId) async {
@@ -42,12 +54,12 @@ class UserHttpServices {
   }
 
   Future<void> editUser(
-      String id, String newnNme, String newBirthday) async {
+      String id, String newName, String newBirthday) async {
     Uri url = Uri.parse(
         "https://imtihon3-default-rtdb.firebaseio.com/users/$id.json");
 
     Map<String, dynamic> todoData = {
-      "name": newnNme,
+      "name": newName,
       "birthday": newBirthday,
     };
     await http.patch(

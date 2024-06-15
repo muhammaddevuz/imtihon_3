@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:imtihon3/utils/app_constans.dart';
+import 'package:imtihon3/views/screens/booked_hotels_history.dart';
 import 'package:imtihon3/views/screens/home_screen.dart';
 import 'package:imtihon3/views/screens/splash_screen.dart';
 
@@ -31,7 +32,7 @@ class _MyAppState extends State<MyApp> {
         debugShowCheckedModeBanner: false,
         theme: AppConstans.themeCheck ? ThemeData.dark() : ThemeData.light(),
         // home:  SplashScreen(themChanged: changeMode,),
-        home: HomeScreen(themChanged: changeMode),
+        home: SplashScreen(themChanged: changeMode, edited: () {  },),
       ),
     );
     // home: SplashScreen(themChanged: changeMode)));
