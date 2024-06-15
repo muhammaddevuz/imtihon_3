@@ -5,10 +5,8 @@ import 'package:imtihon3/views/screens/login_screen.dart';
 
 class RegisterScreen extends StatefulWidget {
   final ValueChanged<void> themChanged;
-  final Function() edited;
-  final Function() mainEdited;
 
-  RegisterScreen({super.key, required this.themChanged, required this.edited,required this.mainEdited});
+  RegisterScreen({super.key, required this.themChanged});
 
   @override
   State<RegisterScreen> createState() => _RegisterScreenState();
@@ -40,9 +38,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           MaterialPageRoute(
             builder: (ctx) {
               return LoginScreen(
-                mainEdited: widget.mainEdited,
                 themChanged: widget.themChanged,
-                edited: widget.edited,
               );
             },
           ),
@@ -162,8 +158,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       builder: (ctx) {
                         return LoginScreen(
                           themChanged: widget.themChanged,
-                          edited: widget.edited,
-                          mainEdited: widget.mainEdited,
                         );
                       },
                     ),

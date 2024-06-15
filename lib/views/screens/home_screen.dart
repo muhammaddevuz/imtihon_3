@@ -1,9 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:imtihon3/controllers/hotel_controller.dart';
 import 'package:imtihon3/models/hotel.dart';
-import 'package:imtihon3/services/auth_http_services.dart';
 import 'package:imtihon3/views/screens/profile_screen.dart';
 import 'package:imtihon3/views/widgets/search_view_delegate.dart';
 
@@ -16,10 +14,9 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  HotelController hotelController = HotelController();
+  // HotelController hotelController = HotelController();
   List<Hotel> hotelList = [];
   Future<void> getHotels() async {
-    hotelList = await hotelController.getHotels();
     setState(() {});
   }
 

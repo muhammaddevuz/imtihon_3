@@ -6,16 +6,19 @@ import 'package:imtihon3/views/screens/home_screen.dart';
 import 'package:imtihon3/views/screens/register_screen.dart';
 import 'package:imtihon3/views/screens/reset_password_screen.dart';
 
-
+class LoginScreen extends StatefulWidget {
+  final ValueChanged<void> themChanged;
+  LoginScreen({required this.themChanged});
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  State<StatefulWidget> createState() {
+    return _LoginScreenState();
+  }
 }
 
 class _LoginScreenState extends State<LoginScreen> {
   final formKey = GlobalKey<FormState>();
   final _authHttpServices = AuthHttpServices();
   bool isLoading = false;
-
 
   String? email;
   String? password;
@@ -28,15 +31,13 @@ class _LoginScreenState extends State<LoginScreen> {
         isLoading = true;
       });
       if (email == Admin.admin['login'] && password == Admin.admin['parol']) {
-        Navigator.pushReplacement(
-          // ignore: use_build_context_synchronously
-          context,
-          MaterialPageRoute(
-            builder: (ctx) {
-
-            },
-          ),
-        );
+        // Navigator.pushReplacement(
+        //   // ignore: use_build_context_synchronously
+        //   context,
+        //   MaterialPageRoute(
+        //     builder: (context) =>AdminPanel(themChanged: themChanged, edited: edited, mainEdited: mainEdited),
+        //   ),
+        // );
       }
       try {
         await _authHttpServices.login(email!, password!);
@@ -157,9 +158,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
-                      builder: (ctx) {
-
-                      },
+                      builder: (context) => RegisterScreen(themChanged: widget.themChanged),
                     ),
                   );
                 },

@@ -91,7 +91,6 @@ class UserHttpServices {
   }
 
   Future<void> deleteOrderedHotel(String userId,List orderedHotel, String hotelId) async {
-    print(userId);
     Uri editUrl = Uri.parse(
         "https://imtihon3-default-rtdb.firebaseio.com/users/$userId.json");
     Uri urlHotels =
@@ -120,7 +119,6 @@ class UserHttpServices {
       for (var i = 0; i < orderedHotels.length; i++) {
         hotelIdBox.add(orderedHotels[i].hotelId);
       }
-      print(hotelIdBox);
       await http.patch(
         editUrl,
         body: jsonEncode({"orderedHotels": hotelIdBox}),

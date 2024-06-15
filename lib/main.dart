@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:imtihon3/utils/app_constans.dart';
-import 'package:imtihon3/views/screens/admin_panel/admin_panel.dart';
+import 'package:imtihon3/views/screens/home_screen.dart';
 import 'package:imtihon3/views/screens/splash_screen.dart';
 
 void main() {
@@ -20,15 +20,20 @@ class _MyAppState extends State<MyApp> {
     AppConstans.themeCheck = !AppConstans.themeCheck;
     setState(() {});
   }
-  void changed() => setState(() {});
 
   @override
   Widget build(BuildContext context) {
     return ScreenUtilInit(
-        designSize: const Size(360, 690),
-        minTextAdapt: true,
-        splitScreenMode: true,
-        child: MaterialApp(
-
+      designSize: const Size(360, 690),
+      minTextAdapt: true,
+      splitScreenMode: true,
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        theme: AppConstans.themeCheck ? ThemeData.dark() : ThemeData.light(),
+        // home:  SplashScreen(themChanged: changeMode,),
+        home: SplashScreen(themChanged: changeMode),
+      ),
+    );
+    // home: SplashScreen(themChanged: changeMode)));
   }
 }
