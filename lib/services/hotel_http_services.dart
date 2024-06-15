@@ -21,7 +21,6 @@ class HotelHttpServices {
         value['hotelId'] = key;
         resultList.add(Hotel.fromJson(value));
       });
-      print(data);
 
       return resultList;
     } catch (e) {

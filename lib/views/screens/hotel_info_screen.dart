@@ -128,7 +128,7 @@ class _HotelInfoScreenState extends State<HotelInfoScreen> {
                               fontSize: 18.sp),
                         ),
                         Text(
-                          widget.hotel.description,
+                          widget.hotel.location,
                           style: TextStyle(
                               fontWeight: FontWeight.w400, fontSize: 14.sp),
                         ),
