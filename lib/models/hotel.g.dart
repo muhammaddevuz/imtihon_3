@@ -23,9 +23,11 @@ Hotel _$HotelFromJson(Map<String, dynamic> json) => Hotel(
       spaceRooms: (json['spaceRooms'] as List<dynamic>)
           .map((e) => (e as num).toInt())
           .toList(),
+      location: json['location'] as String,
     );
 
 Map<String, dynamic> _$HotelToJson(Hotel instance) => <String, dynamic>{
+      'hotelId': instance.hotelId,
       'amenities': instance.amenities,
       'comment': instance.comment,
       'description': instance.description,
@@ -34,4 +36,5 @@ Map<String, dynamic> _$HotelToJson(Hotel instance) => <String, dynamic>{
       'price': instance.price,
       'rating': instance.rating,
       'spaceRooms': instance.spaceRooms,
+      'location': instance.location,
     };

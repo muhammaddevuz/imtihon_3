@@ -41,8 +41,7 @@ class UserHttpServices {
     );
   }
 
-  Future<void> editUser(
-      String id, String newnNme, String newBirthday) async {
+  Future<void> editUser(String id, String newnNme, String newBirthday) async {
     Uri url = Uri.parse(
         "https://imtihon3-default-rtdb.firebaseio.com/users/$id.json");
 
@@ -54,5 +53,35 @@ class UserHttpServices {
       url,
       body: jsonEncode(todoData),
     );
+  }
+
+  Future<void> addComment(String comment, String hotelId) async {
+    Uri url = Uri.parse(
+        "https://imtihon3-default-rtdb.firebaseio.com/hotels/-O-QX_D36lkvOM08Szui/comment.json");
+
+    final response = await http.get(url);
+
+    if (response.statusCode == 200) {
+      List<dynamic> comments = jsonDecode(response.body) ?? [];
+      comments.add(comment);
+      await http.put(url, body: jsonEncode(comments));
+    } else {
+      throw Exception('Failed to load comments');
+    }
+  }
+
+  Future<void> addOrderedHotel(String userId, String hotelId) async {
+    Uri url = Uri.parse(
+        "https://imtihon3-default-rtdb.firebaseio.com/users/$userId/orderedHotels/.json");
+
+    final response = await http.get(url);
+
+    if (response.statusCode == 200) {
+      List<dynamic> orderedHotels = jsonDecode(response.body) ?? [];
+      orderedHotels.add(hotelId);
+      await http.put(url, body: jsonEncode(orderedHotels));
+    } else {
+      throw Exception('Failed to load comments');
+    }
   }
 }
