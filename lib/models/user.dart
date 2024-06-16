@@ -8,6 +8,7 @@ class User {
   String name;
   String email;
   DateTime birthday;
+  @JsonKey(defaultValue: [])
   List orderedHotels;
 
   User({

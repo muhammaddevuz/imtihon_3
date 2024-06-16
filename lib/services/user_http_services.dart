@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:imtihon3/models/hotel.dart';
 import 'package:imtihon3/models/user.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -20,6 +21,38 @@ class UserHttpServices {
       });
     }
     return loadedTodos[0];
+  }
+
+  Future<List<User>> getUsers() async {
+    Uri url =
+        Uri.parse("https://imtihon3-default-rtdb.firebaseio.com/users.json");
+    final response = await http.get(url);
+    final Map<String, dynamic> data = jsonDecode(response.body);
+    List<User> loadedUsers = [];
+    data.forEach((key, value) {
+      value['id'] = key;
+      loadedUsers.add(User.fromJson(value));
+    });
+    return loadedUsers;
+  }
+
+  Future<List<Hotel>> getOrderedHotels(List orderedHotel) async {
+    Uri urlHotels =
+        Uri.parse("https://imtihon3-default-rtdb.firebaseio.com/hotels.json");
+    List<Hotel> orderedHotels = [];
+    final responseHotels = await http.get(urlHotels);
+
+    final Map<String, dynamic> dataHotels = json.decode(responseHotels.body);
+
+    for (var element in orderedHotel) {
+      dataHotels.forEach((key, value) {
+        if (element == key) {
+          value['hotelId'] = key;
+          orderedHotels.add(Hotel.fromJson(value));
+        }
+      });
+    }
+    return orderedHotels;
   }
 
   Future<void> addUser(String email, String userId) async {
@@ -55,6 +88,41 @@ class UserHttpServices {
     );
   }
 
+  Future<void> deleteOrderedHotel(
+      String userId, List orderedHotel, String hotelId) async {
+    Uri editUrl = Uri.parse(
+        "https://imtihon3-default-rtdb.firebaseio.com/users/$userId.json");
+    Uri urlHotels =
+        Uri.parse("https://imtihon3-default-rtdb.firebaseio.com/hotels.json");
+    List<Hotel> orderedHotels = [];
+    final responseHotels = await http.get(urlHotels);
+
+    final Map<String, dynamic> dataHotels = json.decode(responseHotels.body);
+
+    for (var element in orderedHotel) {
+      dataHotels.forEach((key, value) {
+        if (element == key) {
+          value['hotelId'] = key;
+          orderedHotels.add(Hotel.fromJson(value));
+        }
+      });
+    }
+    for (var i = 0; i < orderedHotels.length; i++) {
+      if (orderedHotels[i].hotelId == hotelId) {
+        orderedHotels.removeAt(i);
+        break;
+      }
+    }
+    List<String> hotelIdBox = [];
+    for (var i = 0; i < orderedHotels.length; i++) {
+      hotelIdBox.add(orderedHotels[i].hotelId);
+    }
+    await http.patch(
+      editUrl,
+      body: jsonEncode({"orderedHotels": hotelIdBox}),
+    );
+  }
+
   Future<void> addComment(String comment, String hotelId) async {
     Uri url = Uri.parse(
         "https://imtihon3-default-rtdb.firebaseio.com/hotels/-O-QX_D36lkvOM08Szui/comment.json");
@@ -70,18 +138,10 @@ class UserHttpServices {
     }
   }
 
-  Future<void> addOrderedHotel(String userId, String hotelId) async {
+  Future<void> addOrderedHotel(String userId, List orderedHotels) async {
     Uri url = Uri.parse(
-        "https://imtihon3-default-rtdb.firebaseio.com/users/$userId/orderedHotels/.json");
+        "https://imtihon3-default-rtdb.firebaseio.com/users/$userId.json");
 
-    final response = await http.get(url);
-
-    if (response.statusCode == 200) {
-      List<dynamic> orderedHotels = jsonDecode(response.body) ?? [];
-      orderedHotels.add(hotelId);
-      await http.put(url, body: jsonEncode(orderedHotels));
-    } else {
-      throw Exception('Failed to load comments');
-    }
+    http.patch(url, body: jsonEncode({"orderedHotels": orderedHotels}));
   }
 }

@@ -8,6 +8,7 @@ part of 'hotel.dart';
 
 Hotel _$HotelFromJson(Map<String, dynamic> json) => Hotel(
       hotelId: json['hotelId'] as String,
+      location: json['location'] as String,
       amenities:
           (json['amenities'] as List<dynamic>).map((e) => e as String).toList(),
       comment:
@@ -23,7 +24,6 @@ Hotel _$HotelFromJson(Map<String, dynamic> json) => Hotel(
       spaceRooms: (json['spaceRooms'] as List<dynamic>)
           .map((e) => (e as num).toInt())
           .toList(),
-      location: json['location'] as String,
     );
 
 Map<String, dynamic> _$HotelToJson(Hotel instance) => <String, dynamic>{

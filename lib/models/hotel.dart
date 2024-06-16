@@ -14,17 +14,18 @@ class Hotel {
   List<int> spaceRooms;
   String location;
 
-  Hotel(
-      {required this.hotelId,
-      required this.amenities,
-      required this.comment,
-      required this.description,
-      required this.hotelName,
-      required this.imageUrl,
-      required this.price,
-      required this.rating,
-      required this.spaceRooms,
-      required this.location});
+  Hotel({
+    required this.hotelId,
+    required this.location,
+    required this.amenities,
+    required this.comment,
+    required this.description,
+    required this.hotelName,
+    required this.imageUrl,
+    required this.price,
+    required this.rating,
+    required this.spaceRooms,
+  });
 
   static Hotel fromJson(Map<String, dynamic> json) {
     return _$HotelFromJson(json);

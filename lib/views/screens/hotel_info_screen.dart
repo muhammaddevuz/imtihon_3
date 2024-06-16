@@ -114,7 +114,7 @@ class _HotelInfoScreenState extends State<HotelInfoScreen> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          "USA/Washington",
+                          widget.hotel.location,
                           style: TextStyle(
                               fontWeight: FontWeight.w400, fontSize: 14.sp),
                         ),
@@ -145,9 +145,7 @@ class _HotelInfoScreenState extends State<HotelInfoScreen> {
                         Text(
                           'Description',
                           style: TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.w700,
-                              fontSize: 18.sp),
+                              fontWeight: FontWeight.w700, fontSize: 18.sp),
                         ),
                         Text(
                           widget.hotel.description,
@@ -159,9 +157,7 @@ class _HotelInfoScreenState extends State<HotelInfoScreen> {
                     Text(
                       "What this place offers",
                       style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 18.sp,
-                          fontWeight: FontWeight.w700),
+                          fontSize: 18.sp, fontWeight: FontWeight.w700),
                     ),
                     SizedBox(height: 10.h),
                     SizedBox(
@@ -193,9 +189,7 @@ class _HotelInfoScreenState extends State<HotelInfoScreen> {
                     Text(
                       "Comments",
                       style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 18.sp,
-                          fontWeight: FontWeight.w700),
+                          fontSize: 18.sp, fontWeight: FontWeight.w700),
                     ),
                     Container(
                       padding: EdgeInsets.only(top: 10.h),
@@ -324,9 +318,7 @@ class _HotelInfoScreenState extends State<HotelInfoScreen> {
                     Text(
                       'Location',
                       style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 18.sp,
-                          fontWeight: FontWeight.w700),
+                          fontSize: 18.sp, fontWeight: FontWeight.w700),
                     ),
                     SizedBox(height: 10.h),
                     Container(
@@ -334,7 +326,7 @@ class _HotelInfoScreenState extends State<HotelInfoScreen> {
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(20.sp)),
                       child: Image.asset(
-                        'assets/images/location.png',
+                        'assets/map.png',
                         width: double.infinity,
                         fit: BoxFit.cover,
                       ),
@@ -344,10 +336,9 @@ class _HotelInfoScreenState extends State<HotelInfoScreen> {
                     ),
                     Padding(
                       padding: EdgeInsets.only(left: 10.w, right: 20.w),
-                      child: Text(
+                      child: const Text(
                         textAlign: TextAlign.left,
                         'Dago Pakar Villa P4-16, Jl. Dago Pakar Permai IV No.16, Mekarsaluyu, Cimenyan, Bandung Regency, West Java 40198',
-                        style: TextStyle(color: Colors.grey.shade800),
                       ),
                     ),
                     SizedBox(height: 10.h),
@@ -366,17 +357,59 @@ class _HotelInfoScreenState extends State<HotelInfoScreen> {
                             ),
                             Text(
                               "\$${widget.hotel.price} / night",
-                              style: const TextStyle(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.w600),
+                              style:
+                                  const TextStyle(fontWeight: FontWeight.w600),
                             )
                           ],
                         ),
                         FilledButton(
                             onPressed: () async {
-                              User user = await userController.getUser();
-                              await userController.addOrderedHotel(
-                                  user.userId, widget.hotel.hotelId);
+                              await showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return AlertDialog(
+                                    content: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Text(
+                                            "Hotel nomi: ${widget.hotel.hotelName}"),
+                                        SizedBox(height: 10.h),
+                                        Text(
+                                            "Hotel qulayliklari: ${widget.hotel.amenities.join(", ")}"),
+                                        SizedBox(height: 10.h),
+                                        Text(
+                                            "Hotel narxi: ${widget.hotel.price}\$"),
+                                      ],
+                                    ),
+                                    actions: [
+                                      ElevatedButton(
+                                          onPressed: () async {
+                                            User user =
+                                                await userController.getUser();
+                                            List box = user.orderedHotels;
+                                            box.add(widget.hotel.hotelId);
+                                            await userController
+                                                .addOrderedHotel(user.id, box);
+                                            // ignore: use_build_context_synchronously
+                                            Navigator.pop(context);
+                                            await showDialog(
+                                              // ignore: use_build_context_synchronously
+                                              context: context,
+                                              builder: (context) {
+                                                return const AlertDialog(
+                                                  content: Text(
+                                                      "Mehmonhona muvafaqiyatli bron qilindi"),
+                                                );
+                                              },
+                                            );
+                                          },
+                                          child: const Text("Buyurtma qilish"))
+                                    ],
+                                  );
+                                },
+                              );
                             },
                             child: Padding(
                               padding: EdgeInsets.all(5.sp),

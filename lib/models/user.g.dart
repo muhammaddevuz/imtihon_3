@@ -12,7 +12,7 @@ User _$UserFromJson(Map<String, dynamic> json) => User(
       name: json['name'] as String,
       email: json['email'] as String,
       birthday: DateTime.parse(json['birthday'] as String),
-      orderedHotels: json['orderedHotels'] as List<dynamic>,
+      orderedHotels: json['orderedHotels'] as List<dynamic>? ?? [],
     );
 
 Map<String, dynamic> _$UserToJson(User instance) => <String, dynamic>{

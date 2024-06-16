@@ -31,7 +31,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
             TextField(
               controller: emailController,
               decoration: InputDecoration(
-                  border: OutlineInputBorder(),
+                  border:const OutlineInputBorder(),
                   labelText: "Elektron pochta",
                   errorText: emailError),
             ),
@@ -50,6 +50,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                           "Emailingizga parolni qayta tiklash uchun link yuborildi"),
                     ),
                   );
+                  // ignore: use_build_context_synchronously
                   Navigator.pop(context);
                 }
               },

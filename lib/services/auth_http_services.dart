@@ -1,9 +1,7 @@
 import 'dart:convert';
 
-import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import 'package:imtihon3/controllers/user_controller.dart';
-import 'package:imtihon3/models/hotel.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthHttpServices {
@@ -38,7 +36,7 @@ class AuthHttpServices {
     }
   }
 
-  Future<void> login(String email, String password) async {
+  Future login(String email, String password) async {
     Uri url = Uri.parse(
         "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=$_apiKey");
 
@@ -55,6 +53,7 @@ class AuthHttpServices {
       );
       final data = jsonDecode(response.body);
       if (response.statusCode != 200) {
+        
         throw (data['error']['message']);
       }
 
