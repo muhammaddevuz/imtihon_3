@@ -31,7 +31,7 @@ class _MyAppState extends State<MyApp> {
 
   void getData() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    AppConstans.themeCheck = sharedPreferences.getBool("them")?? false;
+    AppConstans.themeCheck = sharedPreferences.getBool("them") ?? false;
     setState(() {});
   }
 
