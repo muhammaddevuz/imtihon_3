@@ -4,6 +4,7 @@ import 'package:imtihon3/controllers/user_controller.dart';
 import 'package:imtihon3/functions/review_calculator.dart';
 import 'package:imtihon3/models/hotel.dart';
 import 'package:imtihon3/models/user.dart';
+
 class HotelInfoScreen extends StatefulWidget {
   final Hotel hotel;
   HotelInfoScreen({super.key, required this.hotel});
