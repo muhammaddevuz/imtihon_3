@@ -128,9 +128,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     getUser();
     return Scaffold(
-      backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Colors.white,
         centerTitle: true,
         title: Text(
           "Hotels",
