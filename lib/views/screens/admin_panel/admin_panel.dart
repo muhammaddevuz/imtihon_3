@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:imtihon3/controllers/admin/admin_controller.dart';
 import 'package:imtihon3/views/screens/admin_panel/user_info_screen.dart';
+import 'package:imtihon3/views/screens/login_screen.dart';
 import 'package:imtihon3/views/widgets/admin_hotels_widget.dart';
 import 'package:imtihon3/views/widgets/edit_hotel_dialog.dart';
 
@@ -61,7 +62,6 @@ class _AdminPanelState extends State<AdminPanel> {
 
   @override
   Widget build(BuildContext context) {
-    //test();
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,

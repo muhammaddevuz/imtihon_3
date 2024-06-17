@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:imtihon3/models/hotel.dart';
 import 'package:imtihon3/views/screens/hotel_info_screen.dart';
+
 class SearchViewDelegate extends SearchDelegate<String> {
   final List<Hotel> data;
+ 
 
   SearchViewDelegate(this.data);
 
@@ -36,7 +38,9 @@ class SearchViewDelegate extends SearchDelegate<String> {
   Widget buildSuggestions(BuildContext context) {
     final suggestionList = query.isEmpty
         ? data
-        : data.where((element) => element.hotelName.contains(query)).toList();
+        : data
+            .where((element) => element.hotelName.toLowerCase().contains(query))
+            .toList();
     return ListView.builder(
         itemCount: suggestionList.length,
         itemBuilder: (context, index) {

@@ -30,16 +30,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   void _loadUserData() async {
-    user = await userController.getUser();
-    if (user != null) {
+    final fetchedUser = await userController.getUser();
+    setState(() {
+      user = fetchedUser;
+      birthday = user!.birthday;
+      userEmail = user!.email;
+      nameEditingController.text = user!.name;
       orderedHotelsFuture =
           userController.getOrderedHotels(user!.orderedHotels);
-      setState(() {
-        birthday = user!.birthday;
-        userEmail = user!.email;
-        nameEditingController.text = user!.name;
-      });
-    }
+    });
   }
 
   Future<void> _refreshOrderedHotels() async {
@@ -70,7 +69,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     value: AppConstans.themeCheck,
                     onChanged: widget.themChanged,
                     title: Text(
-                      "Tungi holat",
+                      "Dark mode",
                       style: TextStyle(
                         fontSize: 15.h,
                       ),
@@ -96,7 +95,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      date()
+                      date(),
                     ],
                   ),
                   SizedBox(height: 10.h),
@@ -182,9 +181,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         }
       },
       child: Text(
-        birthday == null
-            ? "Sanani tanlang"
-            : birthday.toString().split(" ")[0],
+        birthday == null ? "Sanani tanlang" : birthday.toString().split(" ")[0],
         style: TextStyle(fontSize: 15.h, fontWeight: FontWeight.bold),
       ),
     );
@@ -199,7 +196,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
         } else if (snapshot.hasError) {
           return Center(child: Text("Xatolik yuz berdi: ${snapshot.error}"));
         } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-          return const Center(child: Text("Buyurtma qilingan mehmonxonalar yo'q"));
+          return const Center(
+              child: Text("Buyurtma qilingan mehmonxonalar yo'q"));
         } else {
           return ListView.builder(
             itemCount: snapshot.data!.length,

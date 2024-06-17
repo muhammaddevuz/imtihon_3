@@ -41,6 +41,7 @@ class _HotelInfoScreenState extends State<HotelInfoScreen> {
       _formKey.currentState!.dispose();
       _commentController.clear();
       Navigator.of(context).pop();
+
       setState(() {});
     }
   }
@@ -161,9 +162,9 @@ class _HotelInfoScreenState extends State<HotelInfoScreen> {
                     ),
                     SizedBox(height: 10.h),
                     SizedBox(
-                      height: 200.h,
+                      height: 0.15.sh,
                       child: GridView.builder(
-                        physics: const NeverScrollableScrollPhysics(),
+                        physics: const BouncingScrollPhysics(),
                         itemCount: widget.hotel.amenities.length,
                         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                           mainAxisSpacing: 10.sp,
@@ -233,7 +234,8 @@ class _HotelInfoScreenState extends State<HotelInfoScreen> {
                                                                 border:
                                                                     OutlineInputBorder()),
                                                         validator: (value) {
-                                                          if (value == null) {
+                                                          if (value == null ||
+                                                              value.isEmpty) {
                                                             return 'Please enter comment';
                                                           }
                                                           return null;
@@ -374,13 +376,13 @@ class _HotelInfoScreenState extends State<HotelInfoScreen> {
                                       mainAxisSize: MainAxisSize.min,
                                       children: [
                                         Text(
-                                            "Hotel nomi: ${widget.hotel.hotelName}"),
+                                            "Hotel name: ${widget.hotel.hotelName}"),
                                         SizedBox(height: 10.h),
                                         Text(
-                                            "Hotel qulayliklari: ${widget.hotel.amenities.join(", ")}"),
+                                            "Hotel facilities: ${widget.hotel.amenities.join(", ")}"),
                                         SizedBox(height: 10.h),
                                         Text(
-                                            "Hotel narxi: ${widget.hotel.price}\$"),
+                                            "Hotel price: ${widget.hotel.price}\$"),
                                       ],
                                     ),
                                     actions: [
@@ -400,12 +402,12 @@ class _HotelInfoScreenState extends State<HotelInfoScreen> {
                                               builder: (context) {
                                                 return const AlertDialog(
                                                   content: Text(
-                                                      "Mehmonhona muvafaqiyatli bron qilindi"),
+                                                      "Hotel is successfully ordered"),
                                                 );
                                               },
                                             );
                                           },
-                                          child: const Text("Buyurtma qilish"))
+                                          child: const Text("Order"))
                                     ],
                                   );
                                 },

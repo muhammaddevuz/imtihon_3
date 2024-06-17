@@ -23,7 +23,7 @@ class _MyAppState extends State<MyApp> {
     setState(() {});
   }
 
-  @override
+  @override 
   void initState() {
     getData();
     super.initState();
