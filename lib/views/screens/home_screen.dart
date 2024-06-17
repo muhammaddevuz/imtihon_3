@@ -40,6 +40,10 @@ class _HomeScreenState extends State<HomeScreen> {
     return sum / ratings.length;
   }
 
+  void refresh() {
+    setState(() {});
+  }
+
   // List<String> aminitiesList = [];
 
   // void toggleAminitiesList(int index) {

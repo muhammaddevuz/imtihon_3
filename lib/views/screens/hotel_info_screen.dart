@@ -21,7 +21,7 @@ class _HotelInfoScreenState extends State<HotelInfoScreen> {
   bool isLoading = true;
 
   void toggleImage() {
-    if (i + 1 < widget.hotel.imageUrl.length - 1) {
+    if (i < widget.hotel.imageUrl.length - 1) {
       i++;
     } else {
       i = 0;
@@ -92,7 +92,7 @@ class _HotelInfoScreenState extends State<HotelInfoScreen> {
                           child: Padding(
                             padding: EdgeInsets.all(5.sp),
                             child: Text(
-                                "${i + 1}/${widget.hotel.imageUrl.length - 1}"),
+                                "${i + 1}/${widget.hotel.imageUrl.length}"),
                           ),
                         ),
                       ),
