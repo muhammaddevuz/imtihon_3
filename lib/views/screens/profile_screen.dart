@@ -156,7 +156,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 15),
             child: Text(
-              "O'zgartirishlarni saqlash",
+              "Keep changes",
               style: TextStyle(color: Colors.white, fontSize: 13.h),
             ),
           ),
@@ -196,8 +196,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         } else if (snapshot.hasError) {
           return Center(child: Text("Xatolik yuz berdi: ${snapshot.error}"));
         } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-          return const Center(
-              child: Text("Buyurtma qilingan mehmonxonalar yo'q"));
+          return const Center(child: Text("Ordered rooms are not exist"));
         } else {
           return ListView.builder(
             itemCount: snapshot.data!.length,

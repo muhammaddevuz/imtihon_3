@@ -44,28 +44,10 @@ class _HomeScreenState extends State<HomeScreen> {
     setState(() {});
   }
 
-  // List<String> aminitiesList = [];
-
-  // void toggleAminitiesList(int index) {
-  //   aminitiesList.add(allAminities[index]);
-  //   setState(() {});
-  // }
-
-  // void toggleRemoveAminitiesList(int index) {
-  //   aminitiesList.remove(allAminities[index]);
-  //   setState(() {});
-  // }
-
-  // Future<void> getAllAminities() async {
-  //   allAminities = await hotelController.getAllAminities();
-  //   setState(() {});
-  // }
-
   @override
   void initState() {
     super.initState();
     getHotels();
-    // getAllAminities();
   }
 
   void isScroll() {
@@ -200,7 +182,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 IconButton(
                     onPressed: () {
                       reshreshPropers();
-                      // hotelController.getAllAminities();
                       showModalBottomSheet(
                         context: context,
                         builder: (context) {
@@ -214,7 +195,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                   Text(
                                     'Filter',
                                     style: TextStyle(
-                                      color: Colors.black,
                                       fontWeight: FontWeight.w500,
                                       fontSize: 17.sp,
                                     ),
@@ -223,7 +203,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                   Text(
                                     'Price of place',
                                     style: TextStyle(
-                                      color: Colors.black,
                                       fontWeight: FontWeight.w500,
                                       fontSize: 17.sp,
                                     ),
@@ -241,7 +220,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                             Text(
                                               'Min',
                                               style: TextStyle(
-                                                color: Colors.black,
                                                 fontWeight: FontWeight.w300,
                                                 fontSize: 17.sp,
                                               ),
@@ -268,7 +246,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                             Text(
                                               'Max',
                                               style: TextStyle(
-                                                color: Colors.black,
                                                 fontWeight: FontWeight.w300,
                                                 fontSize: 17.sp,
                                               ),
@@ -313,72 +290,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                       child: const Text('Seach hotel'),
                                     ),
                                   )),
-                                  // SizedBox(
-                                  //   height: 100,
-                                  //   child: aminitiesList.isNotEmpty
-                                  //       ? SingleChildScrollView(
-                                  //           scrollDirection: Axis.horizontal,
-                                  //           child: Row(
-                                  //             children: List.generate(
-                                  //               aminitiesList.length,
-                                  //               (int index) {
-                                  //                 return TextButton(
-                                  //                   onPressed: () {
-                                  //                     toggleRemoveAminitiesList(
-                                  //                         index);
-                                  //                   },
-                                  //                   child: Padding(
-                                  //                     padding:
-                                  //                         const EdgeInsets.all(
-                                  //                             10),
-                                  //                     child: Text(
-                                  //                         aminitiesList[index]),
-                                  //                   ),
-                                  //                 );
-                                  //               },
-                                  //             ),
-                                  //           ),
-                                  //         )
-                                  //       : const Center(
-                                  //           child: Text(
-                                  //               'empty choice of amenities')),
-                                  // ),
-                                  // SizedBox(height: 10.h),
-                                  // SizedBox(
-                                  //   height: 1.sh,
-                                  //   child: GridView.builder(
-                                  //     physics: const BouncingScrollPhysics(),
-                                  //     itemCount: allAminities.length,
-                                  //     gridDelegate:
-                                  //         SliverGridDelegateWithFixedCrossAxisCount(
-                                  //       mainAxisSpacing: 10.sp,
-                                  //       crossAxisSpacing: 10.sp,
-                                  //       crossAxisCount: 3,
-                                  //     ),
-                                  //     itemBuilder: (_, index) {
-                                  //       return InkWell(
-                                  //         onTap: () {
-                                  //           toggleAminitiesList(index);
-                                  //         },
-                                  //         child: Container(
-                                  //           alignment: Alignment.center,
-                                  //           padding: EdgeInsets.all(12.sp),
-                                  //           decoration: BoxDecoration(
-                                  //             color: Colors.grey.shade100,
-                                  //             borderRadius:
-                                  //                 BorderRadius.circular(10.sp),
-                                  //             border: Border.all(
-                                  //                 color: Colors.grey),
-                                  //           ),
-                                  //           child: Text(
-                                  //             allAminities[index],
-                                  //             style: TextStyle(fontSize: 15.sp),
-                                  //           ),
-                                  //         ),
-                                  //       );
-                                  //     },
-                                  //   ),
-                                  // ),
                                 ],
                               ),
                             ),
@@ -396,9 +307,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     )),
                 ZoomTapAnimation(
                   onTap: () => isScroll(),
-                  child: flag
-                      ? const Text("Show All")
-                      : const Icon(Icons.exit_to_app_sharp),
+                  child:
+                      flag ? const Text("Show All") : const Text('      back'),
                 ),
               ],
             ),
@@ -727,10 +637,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                           CrossAxisAlignment.start,
                                       children: [
                                         Text(
-                                          "Hotel name: ${data[index].hotelName}",
-                                          style: const TextStyle(
+                                          "${data[index].hotelName}",
+                                          style: TextStyle(
                                               fontWeight: FontWeight.bold,
-                                              fontSize: 20),
+                                              fontSize: 18.sp),
                                         ),
                                         Row(
                                           children: [
@@ -740,11 +650,11 @@ class _HomeScreenState extends State<HomeScreen> {
                                             ),
                                             SizedBox(width: 3.w),
                                             Text(
-                                              "Location: ${data[index].location}",
+                                              "${data[index].location}",
                                               style: TextStyle(
-                                                  fontSize: 15.h,
-                                                  fontWeight: FontWeight.w400,
-                                                  color: Colors.grey.shade900),
+                                                fontSize: 15.h,
+                                                fontWeight: FontWeight.w400,
+                                              ),
                                             ),
                                           ],
                                         ),
