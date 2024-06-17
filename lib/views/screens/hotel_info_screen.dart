@@ -214,64 +214,60 @@ class _HotelInfoScreenState extends State<HotelInfoScreen> {
                                         showModalBottomSheet(
                                           context: context,
                                           builder: (BuildContext context) {
-                                            return Center(
-                                              child: Padding(
-                                                padding:
-                                                    const EdgeInsets.all(17.0),
-                                                child: Column(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.center,
-                                                  mainAxisSize:
-                                                      MainAxisSize.min,
-                                                  children: [
-                                                    Form(
-                                                      key: _formKey,
-                                                      child: TextFormField(
-                                                        controller:
-                                                            _commentController,
-                                                        decoration:
-                                                            const InputDecoration(
-                                                                border:
-                                                                    OutlineInputBorder()),
-                                                        validator: (value) {
-                                                          if (value == null ||
-                                                              value.isEmpty) {
-                                                            return 'Please enter comment';
-                                                          }
-                                                          return null;
-                                                        },
+                                            return Padding(
+                                              padding:
+                                                  const EdgeInsets.all(40.0),
+                                              child: Column(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                mainAxisSize: MainAxisSize.min,
+                                                children: [
+                                                  Form(
+                                                    key: _formKey,
+                                                    child: TextFormField(
+                                                      controller:
+                                                          _commentController,
+                                                      decoration:
+                                                          const InputDecoration(
+                                                              border:
+                                                                  OutlineInputBorder()),
+                                                      validator: (value) {
+                                                        if (value == null ||
+                                                            value.isEmpty) {
+                                                          return 'Please enter comment';
+                                                        }
+                                                        return null;
+                                                      },
+                                                    ),
+                                                  ),
+                                                  SizedBox(height: 10.h),
+                                                  InkWell(
+                                                    onTap: () async {
+                                                      onSubmit();
+                                                    },
+                                                    child: Container(
+                                                      decoration: BoxDecoration(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(
+                                                                      7.sp),
+                                                          color: Colors.amber),
+                                                      width: double.infinity,
+                                                      padding:
+                                                          EdgeInsets.all(10.sp),
+                                                      child: Text(
+                                                        "Add comment",
+                                                        style: TextStyle(
+                                                            fontSize: 15.sp,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .w500),
+                                                        textAlign:
+                                                            TextAlign.center,
                                                       ),
                                                     ),
-                                                    SizedBox(height: 10.h),
-                                                    InkWell(
-                                                      onTap: () async {
-                                                        onSubmit();
-                                                      },
-                                                      child: Container(
-                                                        decoration: BoxDecoration(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        7.sp),
-                                                            color:
-                                                                Colors.amber),
-                                                        width: double.infinity,
-                                                        padding: EdgeInsets.all(
-                                                            10.sp),
-                                                        child: Text(
-                                                          "Add comment",
-                                                          style: TextStyle(
-                                                              fontSize: 15.sp,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w500),
-                                                          textAlign:
-                                                              TextAlign.center,
-                                                        ),
-                                                      ),
-                                                    )
-                                                  ],
-                                                ),
+                                                  )
+                                                ],
                                               ),
                                             );
                                           },
