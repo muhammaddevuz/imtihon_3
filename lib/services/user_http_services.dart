@@ -125,7 +125,7 @@ class UserHttpServices {
 
   Future<void> addComment(String comment, String hotelId) async {
     Uri url = Uri.parse(
-        "https://imtihon3-default-rtdb.firebaseio.com/hotels/-O-QX_D36lkvOM08Szui/comment.json");
+        "https://imtihon3-default-rtdb.firebaseio.com/hotels/$hotelId/comment");
 
     final response = await http.get(url);
 
