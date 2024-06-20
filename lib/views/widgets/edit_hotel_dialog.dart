@@ -94,7 +94,7 @@ class _EditHotelDialogState extends State<EditHotelDialog> {
                 },
                 onSaved: (String? newValue) {
                   if (newValue != null) {
-                    imageUrl = newValue.split(',');
+                    imageUrl = newValue.trim().split(',');
                   }
                 },
               ),
@@ -109,7 +109,7 @@ class _EditHotelDialogState extends State<EditHotelDialog> {
                 },
                 onSaved: (String? newValue) {
                   if (newValue != null) {
-                    amenities = newValue.split(',');
+                    amenities = newValue.trim().split(',');
                   }
                 },
               ),
@@ -141,6 +141,7 @@ class _EditHotelDialogState extends State<EditHotelDialog> {
                 onSaved: (String? newValue) {
                   if (newValue != null) {
                     rating = newValue
+                        .trim()
                         .split(',')
                         .map((e) => int.tryParse(e.trim()) ?? 0)
                         .toList();
@@ -159,6 +160,7 @@ class _EditHotelDialogState extends State<EditHotelDialog> {
                 onSaved: (String? newValue) {
                   if (newValue != null) {
                     spaceRooms = newValue
+                        .trim()
                         .split(',')
                         .map((e) => int.tryParse(e.trim()) ?? 0)
                         .toList();

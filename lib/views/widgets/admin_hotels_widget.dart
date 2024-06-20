@@ -25,7 +25,7 @@ class _HotelsWidgetState extends State<HotelsWidget> {
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.only(bottom: 10, top: widget.index == 0 ? 15 : 0),
-      padding: EdgeInsets.only(top: 5.h,bottom: 5.h),
+      padding: EdgeInsets.only(top: 5.h, bottom: 5.h),
       width: 343.w,
       height: 200.h,
       decoration: BoxDecoration(
@@ -55,12 +55,15 @@ class _HotelsWidgetState extends State<HotelsWidget> {
               children: [
                 Text(
                   widget.hotels[widget.index].hotelName,
-                  style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w700),
+                  style: TextStyle(
+                      fontSize: 18.sp,
+                      fontWeight: FontWeight.w700,
+                      color: Colors.black),
                 ),
                 SizedBox(height: 5.h),
                 Text(
                   widget.hotels[widget.index].location,
-                  style: TextStyle(fontSize: 16.sp,),
+                  style: TextStyle(fontSize: 16.sp, color: Colors.black),
                 ),
                 SizedBox(height: 5.h),
                 Row(
@@ -71,13 +74,13 @@ class _HotelsWidgetState extends State<HotelsWidget> {
                     ),
                     Text(
                       widget.hotels[widget.index].rating[0].toString(),
-                      style: TextStyle(fontSize: 14.sp),
+                      style: TextStyle(fontSize: 14.sp, color: Colors.black),
                     ),
                     const SizedBox(width: 5),
                     Expanded(
                       child: Text(
                         '(${widget.hotels[widget.index].description})',
-                        style: TextStyle(fontSize: 14.sp),
+                        style: TextStyle(fontSize: 14.sp, color: Colors.black),
                         overflow: TextOverflow.ellipsis,
                       ),
                     ),
@@ -88,17 +91,15 @@ class _HotelsWidgetState extends State<HotelsWidget> {
                   child: SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
                     child: Row(
-                      children:
-                      List.generate(
+                      children: List.generate(
                         widget.hotels[widget.index].amenities.length,
-                            (int index) {
+                        (int index) {
                           return Padding(
                             padding: const EdgeInsets.only(right: 8.0),
                             child: Text(
                               widget.hotels[widget.index].amenities[index],
                               style: TextStyle(
-                                fontSize: 14.sp,
-                              ),
+                                  fontSize: 14.sp, color: Colors.black),
                             ),
                           );
                         },
@@ -106,12 +107,20 @@ class _HotelsWidgetState extends State<HotelsWidget> {
                     ),
                   ),
                 ),
-                const SizedBox(height: 5,),
-                Text("Space rooms: ${widget.hotels[widget.index].spaceRooms[0].toString()}"),
+                const SizedBox(
+                  height: 5,
+                ),
+                Text(
+                  "Space rooms: ${widget.hotels[widget.index].spaceRooms[0].toString()}",
+                  style: TextStyle(color: Colors.black),
+                ),
                 SizedBox(height: 5.h),
                 Text(
                   '\$${widget.hotels[widget.index].price}/night',
-                  style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w700),
+                  style: TextStyle(
+                      fontSize: 18.sp,
+                      fontWeight: FontWeight.w700,
+                      color: Colors.black),
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,

@@ -637,7 +637,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                           CrossAxisAlignment.start,
                                       children: [
                                         Text(
-                                          "${data[index].hotelName}",
+                                          data[index].hotelName,
                                           style: TextStyle(
                                               fontWeight: FontWeight.bold,
                                               fontSize: 18.sp),
@@ -650,7 +650,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                             ),
                                             SizedBox(width: 3.w),
                                             Text(
-                                              "${data[index].location}",
+                                              data[index].location,
                                               style: TextStyle(
                                                 fontSize: 15.h,
                                                 fontWeight: FontWeight.w400,

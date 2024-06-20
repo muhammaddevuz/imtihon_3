@@ -40,6 +40,7 @@ class _HotelInfoScreenState extends State<HotelInfoScreen> {
           _commentController.text, widget.hotel.hotelId);
       _formKey.currentState!.dispose();
       _commentController.clear();
+      // ignore: use_build_context_synchronously
       Navigator.of(context).pop();
 
       setState(() {});
@@ -86,13 +87,17 @@ class _HotelInfoScreenState extends State<HotelInfoScreen> {
                           width: 40.w,
                           alignment: Alignment.center,
                           decoration: BoxDecoration(
-                            color: const Color(0xFFC3C7CA),
+                            color: const Color.fromARGB(255, 21, 139, 25),
                             borderRadius: BorderRadius.circular(13.sp),
                           ),
                           child: Padding(
                             padding: EdgeInsets.all(5.sp),
                             child: Text(
-                                "${i + 1}/${widget.hotel.imageUrl.length}"),
+                              "${i + 1}/${widget.hotel.imageUrl.length}",
+                              style: const TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w500),
+                            ),
                           ),
                         ),
                       ),
@@ -281,32 +286,36 @@ class _HotelInfoScreenState extends State<HotelInfoScreen> {
                           Expanded(
                             child: SingleChildScrollView(
                               scrollDirection: Axis.horizontal,
-                              child: Row(
-                                children: List.generate(
-                                    widget.hotel.comment.length, (int index) {
-                                  return Container(
-                                    margin: EdgeInsets.only(right: 20.w),
-                                    width: 140.w,
-                                    padding: EdgeInsets.all(20.sp),
-                                    decoration: BoxDecoration(
-                                      borderRadius:
-                                          BorderRadius.circular(10.sp),
-                                      border: Border.all(color: Colors.grey),
-                                    ),
-                                    child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        const CircleAvatar(
-                                          child: Icon(Icons.person),
-                                        ),
-                                        SizedBox(height: 10.h),
-                                        Text(widget.hotel.comment[index]),
-                                      ],
-                                    ),
-                                  );
-                                }),
-                              ),
+                              child: widget.hotel.comment.length > 1
+                                  ? Row(
+                                      children: List.generate(
+                                          widget.hotel.comment.length,
+                                          (int index) {
+                                        return Container(
+                                          margin: EdgeInsets.only(right: 20.w),
+                                          width: 140.w,
+                                          padding: EdgeInsets.all(20.sp),
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(10.sp),
+                                            border:
+                                                Border.all(color: Colors.grey),
+                                          ),
+                                          child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              const CircleAvatar(
+                                                child: Icon(Icons.person),
+                                              ),
+                                              SizedBox(height: 10.h),
+                                              Text(widget.hotel.comment[index]),
+                                            ],
+                                          ),
+                                        );
+                                      }),
+                                    )
+                                  : const SizedBox(),
                             ),
                           ),
                         ],

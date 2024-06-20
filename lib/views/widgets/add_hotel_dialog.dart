@@ -9,13 +9,8 @@ class AddHotelDialog extends StatefulWidget {
   final bool isEdit;
   final Function refresh;
 
-  const AddHotelDialog({
-    super.key,
-    this.hotel,
-    required this.isEdit,
-    required this.refresh
-
-  });
+  const AddHotelDialog(
+      {super.key, this.hotel, required this.isEdit, required this.refresh});
 
   @override
   State<AddHotelDialog> createState() => _AddHotelDialogState();
@@ -35,10 +30,8 @@ class _AddHotelDialogState extends State<AddHotelDialog> {
   final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
   AdminController adminController = AdminController();
 
-
-
-  Future<void> addHotel() async{
-   await AdminController().addHotel(
+  Future<void> addHotel() async {
+    await AdminController().addHotel(
       amenities: amenities,
       hotelName: hotelName,
       description: description,
@@ -53,7 +46,6 @@ class _AddHotelDialogState extends State<AddHotelDialog> {
   @override
   void initState() {
     super.initState();
-
   }
 
   @override
@@ -107,7 +99,7 @@ class _AddHotelDialogState extends State<AddHotelDialog> {
                 },
                 onSaved: (String? newValue) {
                   if (newValue != null) {
-                    imageUrl = newValue.split(',');
+                    imageUrl = newValue.trim().split(',');
                   }
                 },
               ),
@@ -122,7 +114,7 @@ class _AddHotelDialogState extends State<AddHotelDialog> {
                 },
                 onSaved: (String? newValue) {
                   if (newValue != null) {
-                    amenities = newValue.split(',');
+                    amenities = newValue.trim().split(',');
                   }
                 },
               ),
@@ -156,6 +148,7 @@ class _AddHotelDialogState extends State<AddHotelDialog> {
                 onSaved: (String? newValue) {
                   if (newValue != null) {
                     rating = newValue
+                        .trim()
                         .split(',')
                         .map((e) => int.tryParse(e.trim()) ?? 0)
                         .toList();
@@ -174,6 +167,7 @@ class _AddHotelDialogState extends State<AddHotelDialog> {
                 onSaved: (String? newValue) {
                   if (newValue != null) {
                     spaceRooms = newValue
+                        .trim()
                         .split(',')
                         .map((e) => int.tryParse(e.trim()) ?? 0)
                         .toList();
@@ -209,7 +203,11 @@ class _AddHotelDialogState extends State<AddHotelDialog> {
                 _formkey.currentState!.save();
                 addHotel();
                 widget.refresh();
-                Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) =>const AdminPanel(),));
+                Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const AdminPanel(),
+                    ));
               }
             },
             child: const Text('Save'),

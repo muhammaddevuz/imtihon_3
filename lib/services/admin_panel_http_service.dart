@@ -40,7 +40,7 @@ class AdminHttpService {
   }) async {
     Map<String, dynamic> hotelData = {
       'amenities': amenities,
-      'comment': ["zo'r"],
+      'comment': [''],
       'hotelName': hotelName,
       'description': description,
       'imageUrl': imageUrl,

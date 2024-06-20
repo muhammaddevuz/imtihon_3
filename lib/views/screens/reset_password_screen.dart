@@ -31,15 +31,15 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
             TextField(
               controller: emailController,
               decoration: InputDecoration(
-                  border:const OutlineInputBorder(),
-                  labelText: "Elektron pochta",
+                  border: const OutlineInputBorder(),
+                  labelText: "email",
                   errorText: emailError),
             ),
             SizedBox(height: 20.h),
             FilledButton(
               onPressed: () async {
                 if (emailController.text.isEmpty) {
-                  emailError = "Email kiriting";
+                  emailError = "enter your email";
                   setState(() {});
                 } else {
                   _authHttpServices.sendPasswordEmail(emailController.text);
@@ -47,14 +47,14 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                     context: context,
                     builder: (context) => const AlertDialog(
                       content: Text(
-                          "Emailingizga parolni qayta tiklash uchun link yuborildi"),
+                          "Link has just sent to your email to reset your password"),
                     ),
                   );
                   // ignore: use_build_context_synchronously
                   Navigator.pop(context);
                 }
               },
-              child: const Text("Parolni qayta tiklash"),
+              child: const Text("Reset password"),
             ),
           ],
         ),

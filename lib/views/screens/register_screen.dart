@@ -46,13 +46,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
       } catch (e) {
         String message = e.toString();
         if (e.toString().contains("EMAIL_EXISTS")) {
-          message = "Email mavjud";
+          message = "Email exists";
         }
         showDialog(
           context: context,
           builder: (ctx) {
             return AlertDialog(
-              title: const Text("Xatolik"),
+              title: const Text("Error has occured"),
               content: Text(message),
             );
           },
@@ -90,10 +90,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 ),
                 validator: (value) {
                   if (value == null || value.trim().isEmpty) {
-                    return "Iltimos elektron pochtangizni kiriting";
+                    return "Please enter your email";
                   }
                   if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(value)) {
-                    return "Noto'g'ri elektron pochta formati";
+                    return "invalid email format";
                   }
                   return null;
                 },
@@ -126,7 +126,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 ),
                 validator: (value) {
                   if (value == null || value.trim().isEmpty) {
-                    return "Iltimos parolingizni kiriting";
+                    return "Please enter your password";
                   }
                   return null;
                 },
@@ -159,11 +159,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 ),
                 validator: (value) {
                   if (value == null || value.trim().isEmpty) {
-                    return "Iltimos parolingizni tasdiqlang";
+                    return "Please confirm your password";
                   }
                   if (_passwordController.text !=
                       _passwordConfirmController.text) {
-                    return "Parollar bir xil emas";
+                    return "Passwords don't match";
                   }
                   return null;
                 },
@@ -222,7 +222,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         style: TextStyle(
                           fontWeight: FontWeight.w600,
                           fontSize: 14,
-                          color: Colors.black,
+                          color: Colors.blue,
                         ),
                       ),
                     ),
